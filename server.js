@@ -80,9 +80,8 @@ transporter.sendMail(mailOptions, (error, info) => {
 
   
 });
-
-  
 });
+
 app.get("/login",function(req,res){
   res.render('login');
 });
@@ -180,11 +179,8 @@ app.get('/send', (req, res) => {
       res.render('home', {msg:'Email has been sent'});
   });
 }
-    });
-  });
-  
-  
-  
+});
+});
 
 app.listen(3000,function(){
     console.log("Server is listening!!!!");
