@@ -100,7 +100,7 @@ app.post("/loginenter",function(req,res){
     // console.log('The solution is: ', results);
     if(results.length >0){
       if(results[0].password == password){
-        res.render('home');
+        res.render('email');
       }
       else{
         res.send({
