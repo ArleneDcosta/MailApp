@@ -36,7 +36,7 @@ app.post("/register",function(req,res){
     "Name":req.body.name,
     "Company":req.body.company,
     "email":req.body.email,
-    "password":"F@1lower2",
+    "password":req.body.password,
     "phone":req.body.phone,
     "message":req.body.message,
     "created":today,
@@ -84,8 +84,11 @@ transporter.sendMail(mailOptions, (error, info) => {
   
 });
 app.get("/login",function(req,res){
-    var email= "arlenedcosta33@yahoo.in";
-  var password = "12345";
+  res.render('login');
+});
+app.post("/loginenter",function(req,res){
+    var email= req.body.email;
+  var password = req.body.password;
   connection.query('SELECT * FROM users WHERE email = ?',[email], function (error, results, fields) {
   if (error) {
     // console.log("error ocurred",error);
@@ -97,10 +100,7 @@ app.get("/login",function(req,res){
     // console.log('The solution is: ', results);
     if(results.length >0){
       if(results[0].password == password){
-        res.send({
-          "code":200,
-          "success":"login sucessfull"
-            });
+        res.render('home');
       }
       else{
         res.send({
@@ -153,7 +153,7 @@ app.get('/send', (req, res) => {
     service:'Gmail',
     auth: {
         user: results[0].email, // generated ethereal user
-        pass: 'F@1lower2'  // generated ethereal password
+        pass: results[0].password  // generated ethereal password
     }
     // tls:{
     //   rejectUnauthorized:false
@@ -163,7 +163,7 @@ app.get('/send', (req, res) => {
   // setup email data with unicode symbols
   let mailOptions = {
       from: '"Arlene Dcosta" <'+results[0].email +'>', // sender address
-      to: 'arlenedcosta77@gmail.com', // list of receivers
+      to: 'arlenedcosta77@gmail.com,arlenedcosta78@gmail.com', // list of receivers
       subject: 'Practising code', // Subject line
       text: 'Hello world?', // plain text body
       html: output // html body
