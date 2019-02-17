@@ -99,7 +99,7 @@ app.post("/loginenter",function(req,res){
     // console.log('The solution is: ', results);
     if(results.length >0){
       if(results[0].password == password){
-        res.render('email');
+        res.render('email',{email:results[0].email});
       }
       else{
         res.send({
@@ -119,8 +119,8 @@ app.post("/loginenter",function(req,res){
 
 });
 
-app.get('/send', (req, res) => {
-  var email= "arlenedcosta77@gmail.com";
+app.post('/send', (req, res) => {
+  var email= req.body.email;
   connection.query('SELECT * FROM users WHERE email = ?',[email], function (error, results, fields) {
     console.log(results);
     if (error) {
