@@ -99,7 +99,13 @@ app.post("/loginenter",function(req,res){
     // console.log('The solution is: ', results);
     if(results.length >0){
       if(results[0].password == password){
-        res.render('email',{email:results[0].email});
+        connection.query("select * from messages WHERE emailsender = ?",[email],function(err,result,fields){
+          if (err) throw err;
+          console.log(result);
+          console.log(result.length);
+          res.render('outbox',{result:result});
+        });
+         
       }
       else{
         res.send({
@@ -120,6 +126,7 @@ app.post("/loginenter",function(req,res){
 });
 
 app.post('/send', (req, res) => {
+  console.log(req.body.recipient);
   var email= req.body.email;
   connection.query('SELECT * FROM users WHERE email = ?',[email], function (error, results, fields) {
     console.log(results);
@@ -162,11 +169,20 @@ app.post('/send', (req, res) => {
   // setup email data with unicode symbols
   let mailOptions = {
       from: '"Arlene Dcosta" <'+results[0].email +'>', // sender address
-      to: 'arlenedcosta77@gmail.com,arlenedcosta110@yahoo.com', // list of receivers
-      subject: 'Practising code', // Subject line
-      text: 'Hello world?', // plain text body
+      to: ''+req.body.recipient+'', // list of receivers
+      subject: 'Mass Mail', // Subject line
+      text: 'Offers valid up to Monday', // plain text body
       html: output // html body
   };
+  var today = new Date();
+  var messages={
+    "fromsender":mailOptions.from,
+    "emailsender":results[0].email,
+    "toreceiver":mailOptions.to,
+    "subject":mailOptions.subject,
+    "text":mailOptions.text,
+    "date":today
+  }
 
   // send mail with defined transport object
   transporter.sendMail(mailOptions, (error, info) => {
@@ -176,7 +192,23 @@ app.post('/send', (req, res) => {
       console.log('Message sent: %s', info.messageId);   
       console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
 
-      res.render('home', {msg:'Email has been sent'});
+      connection.query('INSERT INTO messages SET ?',messages, function (error, results, fields) {
+        if (error) {
+          console.log("error ocurred",error);
+          res.send({
+            "code":400,
+            "failed":"error ocurred"
+          })
+        }else{
+          console.log("successfully inserted");
+          }
+        });
+        connection.query("select * from messages WHERE emailsender = ?",[email],function(err,result,fields){
+          if (err) throw err;
+          console.log(result);
+          console.log(result.length);
+          res.render('outbox',{result:result});
+        });
   });
 }
 });

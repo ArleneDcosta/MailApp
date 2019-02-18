@@ -1,0 +1,11 @@
+<% for(var i=0;i< result.length;i++) {  %>
+<p>
+    <p><%=result[i].fromsender %></p>
+</p>
+<% } %>
+
+<form method="POST" action="send">
+    <input type="text" name="recipient">
+    <input type="hidden" name="email" value=<%=result[0].emailsender %> >
+    <button>Send</button>
+</form>
