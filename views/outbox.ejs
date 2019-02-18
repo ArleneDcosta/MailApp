@@ -1,6 +1,10 @@
 <% for(var i=0;i< result.length;i++) {  %>
 <p>
-    <p><%=result[i].fromsender %></p>
+    <p>from:<%= result[i].fromsender %></p>
+    <p>to:<%= result[i].toreceiver %></p>
+    <p>subject:<%= result[i].subject %></p>
+    <p>text:<%= result[i].text %></p>
+    <p>html:<%= result[i].date %></p>
 </p>
 <% } %>
 
