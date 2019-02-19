@@ -1,7 +1,7 @@
 var mysql = require('mysql');
 const path = require('path');
 const nodemailer = require('nodemailer');
-
+const bcrypt = require('bcrypt');
 var connection = mysql.createConnection({
     host:'localhost',
     user:'root',
@@ -28,26 +28,24 @@ app.use(bodyParser.json());
 app.set("view engine","ejs");
 app.engine('handlebars', exphbs());
 app.get("/",function(req,res){
-    res.render("contact.handlebars");
+    res.render("login");
 });
 app.post("/register",function(req,res){
   var today = new Date();
+  let hash = bcrypt.hashSync(req.body.password,12);
   var users={
-    "Name":req.body.name,
-    "Company":req.body.company,
+    "firstname":req.body.firstname,
+    "lastname":req.body.lastname,
     "email":req.body.email,
-    "password":req.body.password,
-    "phone":req.body.phone,
-    "message":req.body.message,
-    "created":today,
-    "modified":today
+    "password":hash,
+    "phoneno":req.body.phone_no
   }
   const output='<p>Verified</p>';
   let transporter = nodemailer.createTransport({
     service:'Gmail',
     auth: {
         user: req.body.email, // generated ethereal user
-        pass: users.password  // generated ethereal password
+        pass: req.body.password  // generated ethereal password
     }
   });
   let mailOptions = {
@@ -85,9 +83,13 @@ transporter.sendMail(mailOptions, (error, info) => {
 app.get("/login",function(req,res){
   res.render('login');
 });
+app.get("/signup",function(req,res){
+  res.render('signup');
+});
 app.post("/loginenter",function(req,res){
     var email= req.body.email;
   var password = req.body.password;
+  let hash = bcrypt.hashSync(password,12);
   connection.query('SELECT * FROM users WHERE email = ?',[email], function (error, results, fields) {
   if (error) {
     // console.log("error ocurred",error);
@@ -98,7 +100,7 @@ app.post("/loginenter",function(req,res){
   }else{
     // console.log('The solution is: ', results);
     if(results.length >0){
-      if(results[0].password == password){
+      if(bcrypt.compareSync(req.body.password,results[0].password)){
         connection.query("select * from messages WHERE emailsender = ?",[email],function(err,result,fields){
           if (err) throw err;
           console.log(result);
