@@ -10,26 +10,37 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="public/css/style.css">
 </head>
 <body>    
     <br>
     <br>
     <br>
-    <% for(var i=0;i< result.length;i++) {  %>
-        <p>
-            <p>from:<%= result[i].fromsender %>
-                to:<%= result[i].toreceiver %>
-                subject:<%= result[i].subject %>
-                text:<%= result[i].text %>
-                html:<%= result[i].date %></p>
-        </p>
-        <% } %>
-
-        <form method="POST" action="send">
-            <input type="text" name="recipient">
-            <input type="hidden" name="email" value=<%=result[0].emailsender %> >
-            <button>Compose</button>
-        </form>
+    <div class="main">
+        
+         <% for(var i=0;i< result.length;i++) {  %>
+            <div class="panel panel-default"> 
+                      <div class="panel-body">
+                      <!-- <img src="{{image}}" width="4%" height="4%" > -->
+                      <span class="glyphicon glyphicon-envelope"></span>
+                      &nbsp&nbspfrom:<%=result[i].fromsender %>
+                      <p>to:<%=result[i].toreceiver %></p>
+                      <p>subject:<%=result[i].subject %></p>
+                      <p>date:<%=result[i].date %></p>
+                      <p>text:<%=result[i].text %></p>
+                      <button>Forward</button>
+                    </div>
+              </div>
+            <% } %> 
+          
+            
+            <form method="POST" action="send">
+                <input type="text" name="recipient">
+                <input type="hidden" name="email" value=<%=result[0].emailsender %> >
+                <button>Compose</button>
+            </form>
+    </div>
+   
     
     </body>
 </html>

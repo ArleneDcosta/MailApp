@@ -9,6 +9,13 @@ var connection = mysql.createConnection({
     database:'mailtest'
 });
 
+var connect = mysql.createConnection({
+  host:'localhost',
+  user:'root',
+  password:'',
+  database:'company'
+});
+
 connection.connect(function(err){
     if(!err){
         console.log("Database is connected ... nn");
@@ -127,6 +134,10 @@ app.post("/loginenter",function(req,res){
 
 });
 
+app.get('/compose',function(res,req){
+
+});
+
 app.post('/send', (req, res) => {
   console.log(req.body.recipient);
   var email= req.body.email;
@@ -150,7 +161,7 @@ app.post('/send', (req, res) => {
       <li>Phone: ${results[0].phone}</li>
     </ul>
     <h3>Message</h3>
-    <p>${results[0].message}</p>
+    <p>${req.body.message}</p>
   `;
 
   // create reusable transporter object using the default SMTP transport
