@@ -19,11 +19,12 @@
     <div class="main">
         
          <% for(var i=0;i< result.length;i++) {  %>
-            <div class="panel panel-default"> 
+            <div class="panel panel-default">
                       <div class="panel-body">
                       <!-- <img src="{{image}}" width="4%" height="4%" > -->
+                      <p>
                       <span class="glyphicon glyphicon-envelope"></span>
-                      &nbsp&nbspfrom:<%=result[i].fromsender %>
+                      &nbsp&nbspfrom:<%=result[i].fromsender %></p>
                       <p>to:<%=result[i].toreceiver %></p>
                       <p>subject:<%=result[i].subject %></p>
                       <p>date:<%=result[i].date %></p>
