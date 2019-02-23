@@ -1,3 +1,9 @@
+html,body {
+  height:100%;
+  margin: 0;
+  padding: 0;
+}
+
 *{
   box-sizing: border-box;
   margin: 0;
@@ -44,4 +50,19 @@ button:disabled {
 }
 .panel-body {
   padding: 10px;
+  background-color:#f4efef;
+}
+
+.form-actions {
+  margin: 0;
+  background-color: transparent;
+  text-align: center;
+}
+
+.vertical-center {
+  min-height:80%;  /* Fallback for browsers do NOT support vh unit */
+  /* These two lines are counted as one :-)       */
+
+  display: flex;
+  align-items: center;
 }

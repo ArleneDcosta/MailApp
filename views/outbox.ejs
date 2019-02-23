@@ -1,6 +1,6 @@
 <html lang=en>
 <head>
-  <title>Bootstrap Example</title>
+  <title>Mailapp</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
@@ -25,10 +25,10 @@
                       <p>
                       <span class="glyphicon glyphicon-envelope"></span>
                       &nbsp&nbspfrom:<%=result[i].fromsender %></p>
-                      <p>to:<%=result[i].toreceiver %></p>
-                      <p>subject:<%=result[i].subject %></p>
-                      <p>date:<%=result[i].date %></p>
-                      <p>text:<%=result[i].text %></p>
+                      <p>&nbsp&nbsp&nbsp&nbsp&nbsp to:<%=result[i].toreceiver %></p>
+                      <p>&nbsp&nbsp&nbsp&nbsp&nbsp <span class="font-weight-bold">subject:<%=result[i].subject %></span></p>
+                      <p>&nbsp&nbsp&nbsp&nbsp&nbsp date:<%=result[i].date %></p>
+                      <p>&nbsp&nbsp&nbsp&nbsp&nbsp text:<%=result[i].text %></p>
                       <button>Forward</button>
                     </div>
               </div>
