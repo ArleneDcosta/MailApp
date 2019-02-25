@@ -134,18 +134,20 @@ app.post("/loginenter",function(req,res){
 
 });
 
-app.get('/compose',function(res,req){
-  connect.query('select * from companydb where client = ? ',[email],function(error,results,fields){
-    if(error){
-      res.send({
-        "code":400,
-        "failed":"error occurred"
-      });
-    }
-    else{
-      res.render('compose',{result:result});
-    }
-  });
+app.get('/compose',function(req,res){
+  // connect.query('select * from companydb where client = ? ',[email],function(error,results,fields){
+  //   if(error){
+  //     res.send({
+  //       "code":400,
+  //       "failed":"error occurred"
+  //     });
+  //   }
+  //   else{
+  //     res.render('compose',{result:result});
+  //   }
+  // });
+  console.log("INSIDE COMPOSE");
+  res.render('compose');
 
 });
 // compose button will be placed on outbox page and then to the compose page and then from the compose page will be send

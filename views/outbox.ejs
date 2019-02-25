@@ -8,6 +8,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="public/css/style.css">
@@ -16,8 +17,25 @@
     <br>
     <br>
     <br>
-    <div class="main">
-        
+    
+    <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <p>Some text in the Modal..</p>
+        </div>
+      
+      </div>
+    <div class="main" id="main">
+        <div class="sidebar" id="myModal">
+            <a href="#home"><i class="fa fa-fw fa-home"></i> Home</a>
+            <a href="#services"><i class="fa fa-fw fa-wrench"></i> Services</a>
+            <a href="#clients"><i class="fa fa-fw fa-user"></i> Clients</a>
+            <button id="myBtn"><i class="fa fa-fw fa-envelope"></i> Compose</button>
+          </div>
+          
+          
          <% for(var i=0;i< result.length;i++) {  %>
             <div class="panel panel-default">
                       <div class="panel-body">
@@ -38,9 +56,38 @@
             <form method="POST" action="send">
                 <input type="text" name="recipient">
                 <input type="hidden" name="email" value=<%=result[0].emailsender %> >
-                <button>Compose</button>
+                <!-- <button>Compose</button> -->
             </form>
     </div>
+    <script>
+      var modal = document.getElementById('myModal');
+      console.log(modal);
+// Get the button that opens the modal
+  var btn = document.getElementById("myBtn");
+  console.log(btn);
+
+// Get the <span> element that closes the modal
+  var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal 
+btn.onclick = function() {
+  console.log("Clicked");
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+    
+    </script>
    
     
     </body>
