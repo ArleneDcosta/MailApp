@@ -24,6 +24,16 @@ connection.connect(function(err){
         console.log("Error connecting database .... nn");
     }
 });
+
+connect.connect(function(err){
+  if(!err){
+      console.log("Database is connected ... nn");
+  }
+  else{
+      console.log("Error connecting database .... nn");
+  }
+});
+
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
@@ -112,6 +122,9 @@ app.post("/loginenter",function(req,res){
           if (err) throw err;
           console.log(result);
           console.log(result.length);
+          result.push(req.body.email);
+          result.push(req.body.password);
+          console.log(result);
           res.render('outbox',{result:result});
         });
          
@@ -134,22 +147,7 @@ app.post("/loginenter",function(req,res){
 
 });
 
-app.get('/compose',function(req,res){
-  // connect.query('select * from companydb where client = ? ',[email],function(error,results,fields){
-  //   if(error){
-  //     res.send({
-  //       "code":400,
-  //       "failed":"error occurred"
-  //     });
-  //   }
-  //   else{
-  //     res.render('compose',{result:result});
-  //   }
-  // });
-  console.log("INSIDE COMPOSE");
-  res.render('compose');
 
-});
 // compose button will be placed on outbox page and then to the compose page and then from the compose page will be send
 app.post('/send', (req, res) => {
   console.log(req.body.recipient);
@@ -163,19 +161,20 @@ app.post('/send', (req, res) => {
         "failed":"error ocurred"
       })
     }
+    
       else{
+        console.log(email);
         const output = `
     <p>You have a new contact request</p>
     <h3>Contact Details</h3>
     <ul>  
-      <li>Name: ${results[0].Name}</li>
-      <li>Company: ${results[0].Company}</li>
-      <li>Email: ${results[0].email}</li>
-      <li>Phone: ${results[0].phone}</li>
+      <li>Name: XYZ</li>
+      <li>Company:Pehchan</li>
+      <li>Email:blah@gmail.com</li>
+      <li>Phone:0222892939/li>
     </ul>
     <h3>Message</h3>
-    <p>${req.body.message}</p>
-  `;
+    <p>${req.body.message}</p>`;
 
   // create reusable transporter object using the default SMTP transport
   let transporter = nodemailer.createTransport({
@@ -185,17 +184,18 @@ app.post('/send', (req, res) => {
     service:'Gmail',
     auth: {
         user: results[0].email, // generated ethereal user
-        pass: results[0].password  // generated ethereal password
+        pass: req.body.password  // generated ethereal password
     }
     // tls:{
     //   rejectUnauthorized:false
     // }
   });
+  connect.query('SELECT * FROM client WHERE sender = ?',[results[0].email], function (error, results, fields) {
 
   // setup email data with unicode symbols
   let mailOptions = {
-      from: '"Arlene Dcosta" <'+results[0].email +'>', // sender address
-      to: ''+req.body.recipient+'', // list of receivers
+      from: '"Arlene Dcosta" <'+results[0].sender +'>', // sender address
+      to: ''+results[0].client+'', // list of receivers
       subject: 'Mass Mail', // Subject line
       text: 'Offers valid up to Monday', // plain text body
       html: output // html body
@@ -203,7 +203,7 @@ app.post('/send', (req, res) => {
   var today = new Date();
   var messages={
     "fromsender":mailOptions.from,
-    "emailsender":results[0].email,
+    "emailsender":results[0].sender,
     "toreceiver":mailOptions.to,
     "subject":mailOptions.subject,
     "text":mailOptions.text,
@@ -219,6 +219,7 @@ app.post('/send', (req, res) => {
       console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
 
       connection.query('INSERT INTO messages SET ?',messages, function (error, results, fields) {
+        console.log(results);
         if (error) {
           console.log("error ocurred",error);
           res.send({
@@ -229,14 +230,18 @@ app.post('/send', (req, res) => {
           console.log("successfully inserted");
           }
         });
-        connection.query("select * from messages WHERE emailsender = ?",[email],function(err,result,fields){
+        connection.query("select * from messages WHERE emailsender = ?",[results[0].sender],function(err,result,fields){
           if (err) throw err;
           console.log(result);
           console.log(result.length);
+          result.push(req.body.password);
+          console.log(result);
           res.render('outbox',{result:result});
         });
   });
+}); 
 }
+
 });
 });
 

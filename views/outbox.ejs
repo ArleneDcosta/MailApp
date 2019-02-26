@@ -23,7 +23,23 @@
         <!-- Modal content -->
         <div class="modal-content">
           <span class="close">&times;</span>
-          <p>Some text in the Modal..</p>
+          <div class="table-responsive">
+            <form method="POST" action="/send">
+              <table class="table table-bordered">
+                <tbody>
+                  <tr>
+                    <input type="hidden" name="password" value=<%=result[result.length-1] %>>
+                    <input type="hidden" name="email" value=<%=result[result.length-2] %>>
+                    <td>Subject:</td>
+                  </tr>
+                </tbody>
+                 
+
+              </table>
+            <button>Send</button>
+            </form>
+
+          </div>
         </div>
       
       </div>
@@ -53,11 +69,7 @@
             <% } %> 
           
             
-            <form method="POST" action="send">
-                <input type="text" name="recipient">
-                <input type="hidden" name="email" value=<%=result[0].emailsender %> >
-                <!-- <button>Compose</button> -->
-            </form>
+            
     </div>
     <script>
       var modal = document.getElementById('myModal');
