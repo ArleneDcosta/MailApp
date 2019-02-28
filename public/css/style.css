@@ -53,20 +53,20 @@ button:disabled {
   background-color:#f4efef;
 } */
 
-/* .form-actions {
+.form-actions {
   margin: 0;
   background-color: transparent;
   text-align: center;
 }
 
 .vertical-center {
-  min-height:80%;  /* Fallback for browsers do NOT support vh unit */
+  min-height:75%; /* Fallback for browsers do NOT support vh unit */
   /* These two lines are counted as one :-)       */
 
-  /*display: flex;
+  display: flex;
   align-items: center;
 }
-
+/*
 .sidebar {
   height: 100%;
   width: 160px;
@@ -195,7 +195,7 @@ body{
       background-repeat: no-repeat;
   background-size: co;
 }
-table{
+.table{
   background-color: #E8F6F3;
 }
 .abc{
