@@ -103,6 +103,25 @@ app.get("/login",function(req,res){
 app.get("/signup",function(req,res){
   res.render('signup');
 });
+app.post("/sent",function(req,res){
+  var email = req.body.email;
+  connection.query("select * from messages where status ='sent' and emailsender = ? ",[email],function(error,result,fields){
+    if(error){
+      res.send({
+        "code":400,
+        "failed":"error occured"
+      })
+    }else{
+      console.log('Inside Sent emails');
+      result.push(req.body.email);
+      result.push(req.body.password);
+      result.push('sent');
+      console.log(result);
+      res.render('outbox',{result:result});
+    }
+
+  });
+});
 app.post("/loginenter",function(req,res){
     var email= req.body.email;
   var password = req.body.password;
@@ -124,6 +143,7 @@ app.post("/loginenter",function(req,res){
           console.log(result.length);
           result.push(req.body.email);
           result.push(req.body.password);
+          result.push('All');
           console.log(result);
           res.render('outbox',{result:result});
         });
@@ -150,7 +170,7 @@ app.post("/loginenter",function(req,res){
 
 // compose button will be placed on outbox page and then to the compose page and then from the compose page will be send
 app.post('/send', (req, res) => {
-  console.log(req.body.recipient);
+  
   var email= req.body.email;
   connection.query('SELECT * FROM users WHERE email = ?',[email], function (error, results, fields) {
     console.log(results);
@@ -196,14 +216,24 @@ app.post('/send', (req, res) => {
   let mailOptions = {
       from: '"Arlene Dcosta" <'+results[0].sender +'>', // sender address
       to: ''+results[0].client+'', // list of receivers
-      subject: 'Mass Mail', // Subject line
-      text: 'Offers valid up to Monday', // plain text body
+      subject: ''+req.body.subject+'', // Subject line
+      text: 'Practising code', // plain text body
       html: output // html body
   };
   var today = new Date();
   var messages={
     "fromsender":mailOptions.from,
     "emailsender":results[0].sender,
+    "status":'sent',
+    "toreceiver":mailOptions.to,
+    "subject":mailOptions.subject,
+    "text":mailOptions.text,
+    "date":today
+  }
+  var messages1={
+    "fromsender":mailOptions.from,
+    "emailsender":results[0].sender,
+    "status":'draft',
     "toreceiver":mailOptions.to,
     "subject":mailOptions.subject,
     "text":mailOptions.text,
@@ -213,6 +243,18 @@ app.post('/send', (req, res) => {
   // send mail with defined transport object
   transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
+        connection.query('INSERT INTO messages SET ?',messages1, function (error, results, fields) {
+          console.log(results);
+          if (error) {
+            console.log("error ocurred",error);
+            res.send({
+              "code":400,
+              "failed":"error ocurred"
+            })
+          }else{
+            console.log("successfully inserted");
+            }
+          });
           return console.log(error);
       }
       console.log('Message sent: %s', info.messageId);   
@@ -232,9 +274,12 @@ app.post('/send', (req, res) => {
         });
         connection.query("select * from messages WHERE emailsender = ?",[results[0].sender],function(err,result,fields){
           if (err) throw err;
+          console.log('inside final ');
           console.log(result);
           console.log(result.length);
+          result.push(req.body.email);
           result.push(req.body.password);
+          result.push('All');
           console.log(result);
           res.render('outbox',{result:result});
         });
