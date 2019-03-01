@@ -122,6 +122,10 @@ app.post("/sent",function(req,res){
 
   });
 });
+app.post("/senddraft",function(req,res){
+  console.log(req.body.subject);
+  console.log("Reached");
+});
 app.post("/loginenter",function(req,res){
     var email= req.body.email;
   var password = req.body.password;
@@ -233,7 +237,7 @@ app.post('/send', (req, res) => {
   var messages1={
     "fromsender":mailOptions.from,
     "emailsender":results[0].sender,
-    "status":'draft',
+    "status":'failed',
     "toreceiver":mailOptions.to,
     "subject":mailOptions.subject,
     "text":mailOptions.text,

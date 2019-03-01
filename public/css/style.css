@@ -155,6 +155,19 @@ button:disabled {
   text-decoration: none;
   cursor: pointer;
 }
+.close1 {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close1:hover,
+.close1:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
 #heading{
   text-align: left;
   color: #17202A
@@ -173,7 +186,7 @@ button:disabled {
   font-size: 20px;
   padding-bottom: 10px;
 }
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 900px) {
   #nav{
       height:100%;
   }
@@ -200,4 +213,12 @@ body{
 }
 .abc{
   color:#E8F6F3;
+}
+a.button {
+  -webkit-appearance: button;
+  -moz-appearance: button;
+  appearance: button;
+
+  text-decoration: none;
+  color: initial;
 }

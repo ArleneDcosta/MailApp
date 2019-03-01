@@ -17,9 +17,8 @@
     <br>
     <br>
     <br>
-    
+    <div class="container-fluid">
     <div id="myModal" class="modal">
-
         <!-- Modal content -->
         <div class="modal-content">
           <span class="close">&times;</span>
@@ -28,9 +27,9 @@
               <table class="table table-bordered">
                 <tbody>
                   <tr>
-                    <input   name="password" value=<%=result[result.length-2] %>>
-                    <input  name="email" value=<%=result[result.length-3] %>>
-                    <td>Subject:<input type='text' name="subject"></td>
+                    <input type="hidden"  name="password" value=<%=result[result.length-2] %>>
+                    <input type="hidden" name="email" value=<%=result[result.length-3] %>>
+                    <td>Subject:<input type='text'id="sub" name="subject"></td>
                   </tr>
                   <tr>
                     <td>
@@ -42,13 +41,38 @@
 
               </table>
             <button>Send</button>
+            
+
+            </form>
+            <form method="POST" action="/senddraft">
+              <button style="display: none" id="click"></button>
+              <input type="hidden"  name="password" value=<%=result[result.length-2] %>>
+              <input type="hidden" name="email" value=<%=result[result.length-3] %>>
+              <input type="hidden" name="subject" id="sub1">
             </form>
 
           </div>
         </div>
-      
       </div>
-      <div class="container-fluid">
+    </div>
+      
+            <div class="container-fluid">
+                <div id="myModal1" class="modal">
+      
+                    <!-- Modal content -->
+                    <div class="modal-content">
+                      <span class="close1">&times;</span>
+                      <p style="margin:0;display:inline" id="a"></p>
+                      <p style="margin:0;display:inline"  id="b"></p>
+                      <p style="margin:0;display:inline"  id="c"></p>
+                      <p style="margin:0;display:inline"  id="d"></p>
+                      <p style="margin:0;display:inline"  id="e"></p>
+                      <p style="margin:0;display:inline"  id="f"></p>
+                      </div>
+                    </div>
+                  
+                  </div>
+          
         <div class="row">
             <div class="col-lg-3" id="nav">
                 <nav class="navbar navbar-expand-md flex-column">
@@ -84,6 +108,7 @@
             <div class="col-lg-9 col-md-9 col-sm-12">
                 <div class="tab-content">
                   <% if (result[result.length-1]=='sent'){ %>
+                    
                     <div id="sent" class="container tab-pane active" value="sent">
                         <div class="bg "><br>SENT MESSAGES</div>
                         <br>
@@ -101,25 +126,30 @@
                             </tr>
                             
                                 <% for(var i=0;i< result.length-3;i++) {  %>
-                                
+                                  
                                             <!-- <img src="{{image}}" width="4%" height="4%" > -->
                                             <tr>
+                                            
                                             <td>
+                                                <button id="myBtn1" onclick="show('<%=result[i].fromsender %>',
+                                                '<%=result[i].emailsender %>','<%=result[i].toreceiver %>','<%=result[i].subject %>','<%=result[i].text %>','<%=result[i].date %>');">
                                                 <input type="checkbox" class="mail-checkbox">
                                                 <i class="fa fa-star inbox-started"></i>
-                                            </td>
-                                            <td>
+                                            
                                                 &nbsp&nbspfrom:<%=result[i].fromsender %></p>
                                                 <p>&nbsp&nbsp&nbsp&nbsp&nbsp to:<%=result[i].toreceiver %></p>
                                                 <p>&nbsp&nbsp&nbsp&nbsp&nbsp <span class="font-weight-bold">subject:<%=result[i].subject %></span></p>
                                           
                                                 <p>&nbsp&nbsp&nbsp&nbsp&nbsp text:<%=result[i].text %></p>
+                                                <p class="date"><%=result[i].date %></p>
                                                 <!-- <button>Forward</button> -->
+                                                </button>
                                             </td>
                                       
-                                            <td class="date"><%=result[i].date %></td>
+                                            
                                            
                                           </tr> 
+                                        
                                   <% } %> 
                               
                           
@@ -162,19 +192,22 @@
                                               <!-- <img src="{{image}}" width="4%" height="4%" > -->
                                               <tr>
                                               <td>
+                                                <button id="myBtn1" onclick="show('<%=result[i].fromsender %>',
+                                                '<%=result[i].emailsender %>','<%=result[i].toreceiver %>','<%=result[i].subject %>','<%=result[i].text %>','<%=result[i].date %>');">
                                                   <input type="checkbox" class="mail-checkbox">
                                                   <i class="fa fa-star inbox-started"></i>
-                                              </td>
-                                              <td>
+                                              
                                                   &nbsp&nbspfrom:<%=result[i].fromsender %></p>
                                                   <p>&nbsp&nbsp&nbsp&nbsp&nbsp to:<%=result[i].toreceiver %></p>
                                                   <p>&nbsp&nbsp&nbsp&nbsp&nbsp <span class="font-weight-bold">subject:<%=result[i].subject %></span></p>
                                             
                                                   <p>&nbsp&nbsp&nbsp&nbsp&nbsp text:<%=result[i].text %></p>
+                                                  <p class="date"><%=result[i].date %></p>
                                                   <!-- <button>Forward</button> -->
+                                                  </button>
                                               </td>
                                               
-                                              <td class="date"><%=result[i].date %></td>
+                                              
                                              
                                             </tr> 
                                     <% } %> 
@@ -186,33 +219,63 @@
         </div>
     </div>
     </div>
+    <div id=""></div>
     <script>
       var modal = document.getElementById('myModal');
-      console.log(modal);
+      var modal1 = document.getElementById('myModal1');
+      
 // Get the button that opens the modal
   var btn = document.getElementById("myBtn");
-  console.log(btn);
+  var btn1 = document.getElementById("myBtn1");
+  var p=document.getElementById("a");
+  var p1=document.getElementById("b");
+  var p2=document.getElementById("c");
+  var p3=document.getElementById("d");
+  var p4=document.getElementById("e");
+  var p5=document.getElementById("f");
 
 // Get the <span> element that closes the modal
   var span = document.getElementsByClassName("close")[0];
+  var span1 = document.getElementsByClassName("close1")[0];
 
 // When the user clicks the button, open the modal 
 btn.onclick = function() {
   console.log("Clicked");
   modal.style.display = "block";
 }
+ function show(a,b,c,d,e,f) {
+  console.log("Clicked");
+  modal1.style.display = "block";
+  p.innerHTML=a;
+  p1.innerHTML=b;
+  p2.innerHTML=c;
+  p3.innerHTML=d;
+  p4.innerHTML=e;
+  p5.innerHTML=f;
+}
 
 // When the user clicks on <span> (x), close the modal
 span.onclick = function() {
   modal.style.display = "none";
+}
+span1.onclick = function() {
+  modal1.style.display = "none";
 }
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
   if (event.target == modal) {
     modal.style.display = "none";
+    var p = document.getElementById("sub").value;
+    document.getElementById("sub1").value=p;
+    document.getElementById("click").click();
   }
+  if (event.target == modal1) {
+    modal1.style.display = "none";
+  }
+  
 }
+
     
     </script>
    
