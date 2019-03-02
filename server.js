@@ -66,7 +66,7 @@ app.post("/register",function(req,res){
     }
   });
   let mailOptions = {
-    from: ''+req.body.name+' <'+req.body.email +'>', // sender address
+    from: ''+req.body.firstname+' <'+req.body.email +'>', // sender address
     to: ''+req.body.email+'', // list of receivers
     subject: 'Verify', // Subject line
     text: 'Verify', // plain text body
@@ -113,8 +113,10 @@ app.post("/sent",function(req,res){
       })
     }else{
       console.log('Inside Sent emails');
+      console.log(result);
       result.push(req.body.email);
       result.push(req.body.password);
+      result.push(result[0].sendername);
       result.push('sent');
       console.log(result);
       res.render('outbox',{result:result});
@@ -124,7 +126,11 @@ app.post("/sent",function(req,res){
 });
 app.post("/senddraft",function(req,res){
   console.log(req.body.subject);
+  console.log(req.body.message);
+  console.log(req.body.text);
+  console.log(req.body.sender);
   console.log("Reached");
+  
 });
 app.post("/loginenter",function(req,res){
     var email= req.body.email;
@@ -141,12 +147,14 @@ app.post("/loginenter",function(req,res){
     // console.log('The solution is: ', results);
     if(results.length >0){
       if(bcrypt.compareSync(req.body.password,results[0].password)){
-        connection.query("select * from messages WHERE emailsender = ?",[email],function(err,result,fields){
+        connection.query("select * from messages WHERE status='sent' or status='draft' and emailsender = ?",[email],function(err,result,fields){
           if (err) throw err;
           console.log(result);
           console.log(result.length);
           result.push(req.body.email);
           result.push(req.body.password);
+          result.push(result[0].sendername);
+          console.log(result[0].sendername);
           result.push('All');
           console.log(result);
           res.render('outbox',{result:result});
@@ -174,7 +182,7 @@ app.post("/loginenter",function(req,res){
 
 // compose button will be placed on outbox page and then to the compose page and then from the compose page will be send
 app.post('/send', (req, res) => {
-  
+  console.log(req.body.sender);
   var email= req.body.email;
   connection.query('SELECT * FROM users WHERE email = ?',[email], function (error, results, fields) {
     console.log(results);
@@ -218,15 +226,16 @@ app.post('/send', (req, res) => {
 
   // setup email data with unicode symbols
   let mailOptions = {
-      from: '"Arlene Dcosta" <'+results[0].sender +'>', // sender address
+      from: '"'+results[0].Name+'"<'+results[0].sender +'>', // sender address
       to: ''+results[0].client+'', // list of receivers
       subject: ''+req.body.subject+'', // Subject line
-      text: 'Practising code', // plain text body
+      text: ''+req.body.text+'', // plain text body
       html: output // html body
   };
   var today = new Date();
   var messages={
     "fromsender":mailOptions.from,
+    "sendername":results[0].Name,
     "emailsender":results[0].sender,
     "status":'sent',
     "toreceiver":mailOptions.to,
@@ -236,6 +245,7 @@ app.post('/send', (req, res) => {
   }
   var messages1={
     "fromsender":mailOptions.from,
+    "sendername":results[0].Name,
     "emailsender":results[0].sender,
     "status":'failed',
     "toreceiver":mailOptions.to,
@@ -276,13 +286,14 @@ app.post('/send', (req, res) => {
           console.log("successfully inserted");
           }
         });
-        connection.query("select * from messages WHERE emailsender = ?",[results[0].sender],function(err,result,fields){
+        connection.query("select * from messages WHERE status='sent' or status='draft' and emailsender = ?",[results[0].sender],function(err,result,fields){
           if (err) throw err;
           console.log('inside final ');
           console.log(result);
           console.log(result.length);
           result.push(req.body.email);
           result.push(req.body.password);
+          result.push(result[0].sendername);
           result.push('All');
           console.log(result);
           res.render('outbox',{result:result});

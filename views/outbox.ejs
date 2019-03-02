@@ -27,15 +27,20 @@
               <table class="table table-bordered">
                 <tbody>
                   <tr>
-                    <input type="hidden"  name="password" value=<%=result[result.length-2] %>>
-                    <input type="hidden" name="email" value=<%=result[result.length-3] %>>
+                    <input type="hidden"  name="password" value=<%=result[result.length-3] %>>
+                    <input type="hidden" name="email" value=<%=result[result.length-4] %>>
+                    <textarea style="display:none"rows="4" cols="50" name="sender"><%=result[result.length-2]%></textarea>
                     <td>Subject:<input type='text'id="sub" name="subject"></td>
                   </tr>
                   <tr>
-                    <td>
-                    <textarea rows="4" cols="50" name="message" ></textarea>
-                  </td>
+                    <tr>
+                      <td>Text:<input name="text" id="text"></td>
                     </tr>
+                    <tr>
+                    <td>
+                    
+                    <textarea rows="4" cols="50" name="message" id="message">Enter your message:</textarea></td>
+                  </tr>
                 </tbody>
                  
 
@@ -46,9 +51,12 @@
             </form>
             <form method="POST" action="/senddraft">
               <button style="display: none" id="click"></button>
-              <input type="hidden"  name="password" value=<%=result[result.length-2] %>>
-              <input type="hidden" name="email" value=<%=result[result.length-3] %>>
+              <input type="hidden"  name="password" value=<%=result[result.length-3] %>>
+              <input type="hidden" name="email" value=<%=result[result.length-4] %>>
+              <textarea style="display:none"rows="4" cols="50" name="sender" ><%=result[result.length-2]%></textarea>
               <input type="hidden" name="subject" id="sub1">
+              <input type="hidden" name="text" id="text1">
+              <textarea style="display:none" type="hidden" rows="4" cols="50" name="message" id="message1">Enter your message:</textarea>
             </form>
 
           </div>
@@ -88,15 +96,15 @@
                             <button style="height:50px;width:330px"id="myBtn"><i class="fa fa-fw fa-envelope"></i> Compose</button>
                             <li class="nav-item">
                                 <form method="POST" action="/sent">
-                                  <input type="hidden"  name="password" value=<%=result[result.length-2] %>>
-                                  <input type="hidden" name="email" value=<%=result[result.length-3] %>>
+                                  <input type="hidden"  name="password" value=<%=result[result.length-3] %>>
+                                  <input type="hidden" name="email" value=<%=result[result.length-4] %>>
                                   <button style="height:50px;width:330px"id="button"><i class="fa fa-fw fa-user"></i> Send</button>
                                 </form>
                               </li>
                             <li class="nav-item">
                                 <form method="POST" action="/unsent">
-                                  <input type="hidden"  name="password" value=<%=result[result.length-2] %>>
-                                  <input type="hidden" name="email" value=<%=result[result.length-3] %>>
+                                  <input type="hidden"  name="password" value=<%=result[result.length-3] %>>
+                                  <input type="hidden" name="email" value=<%=result[result.length-4] %>>
                                   <button style="height:50px;width:330px"id="button"><i class="fa fa-fw fa-user"></i>Draft</button>
                                 </form>
                               </li>
@@ -125,7 +133,7 @@
                                 </ul>
                             </tr>
                             
-                                <% for(var i=0;i< result.length-3;i++) {  %>
+                                <% for(var i=0;i< result.length-4;i++) {  %>
                                   
                                             <!-- <img src="{{image}}" width="4%" height="4%" > -->
                                             <tr>
@@ -187,7 +195,7 @@
                                   </ul>
                               </tr>
                               
-                                  <% for(var i=0;i< result.length-3;i++) {  %>
+                                  <% for(var i=0;i< result.length-4;i++) {  %>
                                   
                                               <!-- <img src="{{image}}" width="4%" height="4%" > -->
                                               <tr>
@@ -268,6 +276,10 @@ window.onclick = function(event) {
     modal.style.display = "none";
     var p = document.getElementById("sub").value;
     document.getElementById("sub1").value=p;
+    var q = document.getElementById("text").value;
+    document.getElementById("text1").value=q;
+    var r = document.getElementById("message").value;
+    document.getElementById("message1").value=r
     document.getElementById("click").click();
   }
   if (event.target == modal1) {
