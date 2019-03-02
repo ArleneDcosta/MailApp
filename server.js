@@ -125,12 +125,73 @@ app.post("/sent",function(req,res){
   });
 });
 app.post("/senddraft",function(req,res){
-  console.log(req.body.subject);
-  console.log(req.body.message);
-  console.log(req.body.text);
-  console.log(req.body.sender);
+  var today = new Date();
   console.log("Reached");
-  
+  var messages = {
+    "fromsender":req.body.fromsender,
+    "toreceiver":req.body.toreceiver,
+    "emailsender":req.body.email,
+    "sendername":req.body.sender,
+    "status":"draft",
+    "date":today,
+    "subject":req.body.subject,
+    "text":req.body.text,
+    "Messages":req.body.message
+  };
+  if (req.body.subject!=''){
+  connection.query('INSERT INTO messages SET ?',messages, function (error, results, fields) {
+    console.log(results);
+    if (error) {
+      console.log("error ocurred",error);
+      res.send({
+        "code":400,
+        "failed":"error ocurred"
+      })
+    }else{
+      console.log("successfully inserted");
+      }
+    });
+  }
+    connection.query("select * from messages WHERE status='sent' or status='draft' and emailsender = ?",[req.body.email],function(err,result,fields){
+      if (err) throw err;
+      console.log(result);
+      console.log(result.length);
+      result.push(req.body.email);
+      result.push(req.body.password);
+      result.push(result[0].sendername);
+      console.log(result[0].sendername);
+      result.push('All');
+      console.log(result);
+      res.render('outbox',{result:result});
+    });
+});
+app.post("/draft",function(req,res){
+  connection.query("select * from messages WHERE status='draft' and emailsender = ?",[req.body.email],function(err,result,fields){
+    if (err) throw err;
+    console.log(result);
+    console.log(result.length);
+    result.push(req.body.email);
+    result.push(req.body.password);
+    result.push(result[0].sendername);
+    console.log(result[0].sendername);
+    result.push('draft');
+    console.log(result);
+    res.render('outbox',{result:result});
+  });
+});
+app.post("/outbox",function(req,res){
+  connection.query("select * from messages WHERE status='sent' or status='draft' and emailsender = ?",[req.body.email],function(err,result,fields){
+    if (err) throw err;
+    console.log(result);
+    console.log(result.length);
+    result.push(req.body.email);
+    result.push(req.body.password);
+    result.push(result[0].sendername);
+    console.log(result[0].sendername);
+    result.push('All');
+    console.log(result);
+    res.render('outbox',{result:result});
+  });
 });
 app.post("/loginenter",function(req,res){
     var email= req.body.email;
@@ -238,6 +299,7 @@ app.post('/send', (req, res) => {
     "sendername":results[0].Name,
     "emailsender":results[0].sender,
     "status":'sent',
+    "Messages":req.body.message,
     "toreceiver":mailOptions.to,
     "subject":mailOptions.subject,
     "text":mailOptions.text,
@@ -248,6 +310,7 @@ app.post('/send', (req, res) => {
     "sendername":results[0].Name,
     "emailsender":results[0].sender,
     "status":'failed',
+    "Messages":req.body.message,
     "toreceiver":mailOptions.to,
     "subject":mailOptions.subject,
     "text":mailOptions.text,

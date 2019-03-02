@@ -53,6 +53,8 @@
               <button style="display: none" id="click"></button>
               <input type="hidden"  name="password" value=<%=result[result.length-3] %>>
               <input type="hidden" name="email" value=<%=result[result.length-4] %>>
+              <textarea style="display:none"rows="4" cols="50" name="fromsender" ><%=result[0].fromsender%></textarea>
+              <input type="hidden" name="toreceiver" value=<%=result[0].toreceiver %>>
               <textarea style="display:none"rows="4" cols="50" name="sender" ><%=result[result.length-2]%></textarea>
               <input type="hidden" name="subject" id="sub1">
               <input type="hidden" name="text" id="text1">
@@ -70,12 +72,13 @@
                     <!-- Modal content -->
                     <div class="modal-content">
                       <span class="close1">&times;</span>
-                      <p style="margin:0;display:inline" id="a"></p>
-                      <p style="margin:0;display:inline"  id="b"></p>
-                      <p style="margin:0;display:inline"  id="c"></p>
-                      <p style="margin:0;display:inline"  id="d"></p>
-                      <p style="margin:0;display:inline"  id="e"></p>
-                      <p style="margin:0;display:inline"  id="f"></p>
+                      <span>From:<p style="margin:0;display:inline" id="a"></p>
+                      <<p style="margin:0;display:inline"  id="b"></p>></span>
+                      <span>To:<p style="margin:0;display:inline"  id="c"></p></span>
+                      <span>Subject:<p style="margin:0;display:inline"  id="d"></p></span>
+                      <span>Title:<p style="margin:0;display:inline"  id="e"></p></span>
+                      Message:<p style="margin:0;display:inline"  id="f"></p>
+                      <span>Date:<p style="margin:0;display:inline"  id="g"></p></span>
                       </div>
                     </div>
                   
@@ -102,10 +105,17 @@
                                 </form>
                               </li>
                             <li class="nav-item">
-                                <form method="POST" action="/unsent">
+                                <form method="POST" action="/draft">
                                   <input type="hidden"  name="password" value=<%=result[result.length-3] %>>
                                   <input type="hidden" name="email" value=<%=result[result.length-4] %>>
                                   <button style="height:50px;width:330px"id="button"><i class="fa fa-fw fa-user"></i>Draft</button>
+                                </form>
+                              </li>
+                              <li class="nav-item">
+                                <form method="POST" action="/outbox">
+                                  <input type="hidden"  name="password" value=<%=result[result.length-3] %>>
+                                  <input type="hidden" name="email" value=<%=result[result.length-4] %>>
+                                  <button style="height:50px;width:330px"id="button"><i class="fa fa-fw fa-envelope"></i>Outbox</button>
                                 </form>
                               </li>
                             <br>
@@ -139,8 +149,8 @@
                                             <tr>
                                             
                                             <td>
-                                                <button id="myBtn1" onclick="show('<%=result[i].fromsender %>',
-                                                '<%=result[i].emailsender %>','<%=result[i].toreceiver %>','<%=result[i].subject %>','<%=result[i].text %>','<%=result[i].date %>');">
+                                                <button id="myBtn1" onclick="show('<%=result[i].sendername %>',
+                                                '<%=result[i].emailsender %>','<%=result[i].toreceiver %>','<%=result[i].subject %>','<%=result[i].text %>','<%=result[i].Messages %>','<%=result[i].date %>');">
                                                 <input type="checkbox" class="mail-checkbox">
                                                 <i class="fa fa-star inbox-started"></i>
                                             
@@ -173,11 +183,50 @@
                         </table>
                     </div>
                     <% }else if(result[result.length-1]=='draft'){ %>
-
-                    <div id="draft" class="container tab-pane fade" value="draft">
-                        <div class="bg"><br>DRAFT MESSAGES</div><br>
-                        <p>Draft</p>
+                      <div id="draft" class="container tab-pane active" value="draft">
+                        <div class="bg "><br>DRAFT MESSAGES</div>
+                        <br>
+                        <table class="table">
+                            <tr class="abc">
+                                 <ul class="pagination justify-content-end">
+                                    <li class="page-item"><span>1-50 of 234</span></li>
+                                    <li class="page-item">
+                                        <a class="btn" href="#"><i class="fa fa-angle-left  pagination-left"></i></a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="btn" href="#"><i class="fa fa-angle-right pagination-right"></i></a>
+                                     </li>
+                                </ul>
+                            </tr>
+                            
+                                <% for(var i=0;i< result.length-4;i++) {  %>
+                                
+                                            <!-- <img src="{{image}}" width="4%" height="4%" > -->
+                                            <tr>
+                                            <td>
+                                              <button id="myBtn1" onclick="show('<%=result[i].sendername %>',
+                                              '<%=result[i].emailsender %>','<%=result[i].toreceiver %>','<%=result[i].subject %>','<%=result[i].text %>','<%=result[i].Messages %>','<%=result[i].date %>');">
+                                                <input type="checkbox" class="mail-checkbox">
+                                                <i class="fa fa-star inbox-started"></i>
+                                            
+                                                &nbsp&nbspfrom:<%=result[i].fromsender %></p>
+                                                <p>&nbsp&nbsp&nbsp&nbsp&nbsp to:<%=result[i].toreceiver %></p>
+                                                <p>&nbsp&nbsp&nbsp&nbsp&nbsp <span class="font-weight-bold">subject:<%=result[i].subject %></span></p>
+                                          
+                                                <p>&nbsp&nbsp&nbsp&nbsp&nbsp text:<%=result[i].text %></p>
+                                                <p class="date"><%=result[i].date %></p>
+                                                <!-- <button>Forward</button> -->
+                                                </button>
+                                            </td>
+                                            
+                                            
+                                           
+                                          </tr> 
+                                  <% } %> 
+                        </table>
                     </div>
+
+                    
                     <% }else{ %>
                       <div id="sent" class="container tab-pane active" value="sent">
                           <div class="bg "><br>OUTBOX</div>
@@ -200,8 +249,8 @@
                                               <!-- <img src="{{image}}" width="4%" height="4%" > -->
                                               <tr>
                                               <td>
-                                                <button id="myBtn1" onclick="show('<%=result[i].fromsender %>',
-                                                '<%=result[i].emailsender %>','<%=result[i].toreceiver %>','<%=result[i].subject %>','<%=result[i].text %>','<%=result[i].date %>');">
+                                                <button id="myBtn1" onclick="show('<%=result[i].sendername%>',
+                                                '<%=result[i].emailsender %>','<%=result[i].toreceiver %>','<%=result[i].subject %>','<%=result[i].text %>','<%=result[i].Messages %>','<%=result[i].date %>');">
                                                   <input type="checkbox" class="mail-checkbox">
                                                   <i class="fa fa-star inbox-started"></i>
                                               
@@ -241,6 +290,7 @@
   var p3=document.getElementById("d");
   var p4=document.getElementById("e");
   var p5=document.getElementById("f");
+  var p6=document.getElementById("g")
 
 // Get the <span> element that closes the modal
   var span = document.getElementsByClassName("close")[0];
@@ -251,15 +301,17 @@ btn.onclick = function() {
   console.log("Clicked");
   modal.style.display = "block";
 }
- function show(a,b,c,d,e,f) {
+ function show(a,b,c,d,e,f,g) {
   console.log("Clicked");
   modal1.style.display = "block";
+  
   p.innerHTML=a;
   p1.innerHTML=b;
   p2.innerHTML=c;
   p3.innerHTML=d;
   p4.innerHTML=e;
   p5.innerHTML=f;
+  p6.innerHTML=g;
 }
 
 // When the user clicks on <span> (x), close the modal
