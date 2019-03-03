@@ -66,7 +66,7 @@ app.post("/register",function(req,res){
     }
   });
   let mailOptions = {
-    from: ''+req.body.firstname+' <'+req.body.email +'>', // sender address
+    from: '"'+req.body.firstname+'"<'+req.body.email +'>', // sender address
     to: ''+req.body.email+'', // list of receivers
     subject: 'Verify', // Subject line
     text: 'Verify', // plain text body
@@ -263,7 +263,7 @@ app.post('/send', (req, res) => {
     <ul>  
       <li>Name: XYZ</li>
       <li>Company:Pehchan</li>
-      <li>Email:blah@gmail.com</li>
+      <li>Email:pehchan@gmail.com</li>
       <li>Phone:0222892939/li>
     </ul>
     <h3>Message</h3>

@@ -176,11 +176,11 @@ button:disabled {
   align-content: flex-end;
 }
 #nav{
-  background-color:#D0ECE7;
+  background-color:#C1F1EE;
   height:740px;
 }
 .bg{
-  background-color:#D0ECE7;
+  background-color:#C1F1EE;
   width:100%;
   text-align: center;
   font-size: 20px;
@@ -209,7 +209,7 @@ body{
   background-size: co;
 }
 .table{
-  background-color: #E8F6F3;
+  background-color: #C1F1EE ; 
 }
 .abc{
   color:#E8F6F3;
@@ -221,4 +221,24 @@ a.button {
 
   text-decoration: none;
   color: initial;
+}
+.button1{
+  width:88%;
+}
+.position{
+  float: left;
+}
+.position1{
+  position: absolute;
+  left:200px;
+  font-weight:bold;
+}
+
+.position3{
+  float: right;
+  
+}
+button.button1{
+  color:black;
+  background-color: #F0F7F3
 }
