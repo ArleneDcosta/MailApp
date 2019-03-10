@@ -165,6 +165,23 @@ app.post("/senddraft",function(req,res){
       res.render('outbox',{result:result});
     });
 });
+
+app.post("/route",function(req,res){
+  console.log(req.body);
+  connection.query("select * from messages WHERE sendername=? and Messages = ?",[req.body.sender,req.body.message],function(err,result,fields){
+    if (err) throw err;
+    console.log(result);
+    console.log(result.length);
+    result.push(req.body.email);
+    result.push(req.body.password);
+    result.push(result[0].sendername);
+    console.log(result[0].sendername);
+    result.push('All');
+    console.log(result);
+    res.render('home',{result:result});
+  });
+});
+  
 app.post("/draft",function(req,res){
   connection.query("select * from messages WHERE status='draft' and emailsender = ?",[req.body.email],function(err,result,fields){
     if (err) throw err;
