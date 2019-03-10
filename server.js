@@ -181,6 +181,25 @@ app.post("/route",function(req,res){
     res.render('home',{result:result});
   });
 });
+
+app.post("/delete",function(req,res){
+  connection.query("delete from messages WHERE status=? and sendername = ? and Messages = ?",[req.body.status,req.body.sender,req.body.message],function(err,result,fields){
+    if (err) throw err;
+    console.log('DELETION SUCCESSFUL!!!!');
+  });
+  connection.query("select * from messages WHERE status='sent' or status='draft' and emailsender = ?",[req.body.email],function(err,result,fields){
+    if (err) throw err;
+    console.log(result);
+    console.log(result.length);
+    result.push(req.body.email);
+    result.push(req.body.password);
+    result.push(result[0].sendername);
+    console.log(result[0].sendername);
+    result.push('All');
+    console.log(result);
+    res.render('outbox',{result:result});
+  });
+});
   
 app.post("/draft",function(req,res){
   connection.query("select * from messages WHERE status='draft' and emailsender = ?",[req.body.email],function(err,result,fields){

@@ -113,6 +113,14 @@
                           <input type="hidden" name="email" value=<%=result[result.length-4] %>>
                           <button class="btn btn-info" type="submit" class="link" onclick="this.form.submit()">BACK</button>
                         </form>
+                        <form method="POST" action="/delete">
+                          <input type="hidden" name="password" value=<%=result[result.length-3] %>>
+                          <input type="hidden" name="email" value=<%=result[result.length-4] %>>
+                          <input type="hidden" name="status" value="<%=result[0].status%>" >
+                          <textarea style="display:none" name="message" ><%=result[0].Messages%></textarea>
+                          <input type="hidden" name="sender" value="<%=result[0].sendername%>" >
+                          <button class="btn btn-info btn-group-horizontal" type="submit" class="link" onclick="this.form.submit()">DELETE</button>
+                        </form>
                         <br>
                         <table class="table-borderless">
                             <tr class="noborder">
@@ -142,7 +150,15 @@
                           <form method="POST" action="/outbox">
                             <input type="hidden" name="password" value=<%=result[result.length-3] %>>
                             <input type="hidden" name="email" value=<%=result[result.length-4] %>>
-                            <button class="btn btn-info" type="submit" class="link" onclick="this.form.submit()">BACK</button>
+                            <button class="btn btn-info btn-group-horizontal" type="submit" class="link" onclick="this.form.submit()">BACK</button>
+                          </form>
+                          <form method="POST" action="/delete">
+                            <input type="hidden" name="password" value=<%=result[result.length-3] %>>
+                            <input type="hidden" name="email" value=<%=result[result.length-4] %>>
+                            <input type="hidden" name="status" value="<%=result[0].status%>" >
+                            <input type="hidden" name="sender" value="<%=result[0].sendername%>" >
+                            <textarea style="display:none" name="message" ><%=result[0].Messages%></textarea>
+                            <button class="btn btn-info btn-group-horizontal" type="submit" class="link" onclick="this.form.submit()">DELETE</button>
                           </form>
                           <br>
                           <table class="table-borderless">
