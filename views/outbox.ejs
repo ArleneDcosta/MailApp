@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="public/css/style.css">
 </head>
 <body>    
-    <div id="myModal" class="modal">
+    <div id="modal" class="modal">
       <!-- Modal content -->
       <div class="modal-content">
         <span class="close">&times;</span>
@@ -41,12 +41,12 @@
                
 
             </table>
-          <button type="button">Send</button>
+          <button type="button" onclick="this.form.submit()" >Send</button>
           
 
           </form>
           <form method="POST" action="/senddraft">
-            <button style="display: none" id="click"></button>
+            <button style="display: none" id="click" onclick="this.form.submit()" ></button>
             <input type="hidden"  name="password" value=<%=result[result.length-3] %>>
             <input type="hidden" name="email" value=<%=result[result.length-4] %>>
             <textarea style="display:none"rows="4" cols="50" name="fromsender" ><%=result[0].fromsender%></textarea>
@@ -71,7 +71,7 @@
       
             <ul id="menu-content" class="menu-content collapse out">
               <li>
-                <a class="link" id="myBtn"><i class="fa fa-fw fa-envelope"></i> Compose</a>
+                <a class="link" id="myBtn"><i class="fa fa-fw fa-envelope"></i>Compose</a>
               </li>
               <li>
                   <form method="POST" action="/sent">
@@ -251,8 +251,8 @@
    
     
     <script>
-      var modal = document.getElementById('myModal');
-      var modal1 = document.getElementById('myModal1');
+      var modal = document.getElementById("modal");
+      
       
 // Get the button that opens the modal
   var btn = document.getElementById("myBtn");
@@ -261,7 +261,7 @@
 
 // Get the <span> element that closes the modal
   var span = document.getElementsByClassName("close")[0];
-  var span1 = document.getElementsByClassName("close1")[0];
+  
 
 // When the user clicks the button, open the modal 
 btn.onclick = function() {
@@ -277,13 +277,12 @@ function show(id){
 span.onclick = function() {
   modal.style.display = "none";
 }
-span1.onclick = function() {
-  modal1.style.display = "none";
-}
+
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
   if (event.target == modal) {
+    console.log("Inside modal");
     modal.style.display = "none";
     var p = document.getElementById("sub").value;
     document.getElementById("sub1").value=p;
@@ -293,11 +292,7 @@ window.onclick = function(event) {
     document.getElementById("message1").value=r
     document.getElementById("click").click();
   }
-  if (event.target == modal1) {
-    modal1.style.display = "none";
   }
-  
-}
 
     
     </script>

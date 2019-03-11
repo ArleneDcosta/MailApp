@@ -201,7 +201,17 @@ app.post("/delete",function(req,res){
   });
 });
 app.post("/edit",function(req,res){
-  console.log(req.body);
+  connection.query("select * from messages WHERE status='draft' and emailsender = ? and Messages = ?",[req.body.email,req.body.message],function(err,result,fields){
+    if (err) throw err;
+    result.push(req.body.email);
+    result.push(req.body.password);
+    result.push(result[0].sendername);
+    console.log(result[0].sendername);
+    result.push('draft');
+    console.log(result);
+    res.render('edit',{result:result});
+  });
+
 });
 app.post("/draft",function(req,res){
   connection.query("select * from messages WHERE status='draft' and emailsender = ?",[req.body.email],function(err,result,fields){
