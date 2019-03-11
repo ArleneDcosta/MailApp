@@ -200,7 +200,9 @@ app.post("/delete",function(req,res){
     res.render('outbox',{result:result});
   });
 });
-  
+app.post("/edit",function(req,res){
+  console.log(req.body);
+});
 app.post("/draft",function(req,res){
   connection.query("select * from messages WHERE status='draft' and emailsender = ?",[req.body.email],function(err,result,fields){
     if (err) throw err;

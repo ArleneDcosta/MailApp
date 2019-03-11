@@ -301,11 +301,25 @@ Navigation styles
 .nav-side-menu li :not(collapsed) .arrow:before {
   font-family: FontAwesome;
   content: "\f078";
-  display: inline-block;
   padding-left: 10px;
   padding-right: 10px;
   vertical-align: middle;
   float: right;
+}
+.flex {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+}
+
+.flex-child {
+  -webkit-box-flex: 1 1 auto;
+  -moz-box-flex:  1 1 auto;
+  -webkit-flex:  1 1 auto;
+  -ms-flex:  1 1 auto;
+  flex:  1 1 auto;
 }
 .nav-side-menu ul .active,
 .nav-side-menu li .active {
