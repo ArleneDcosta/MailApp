@@ -291,7 +291,7 @@ app.post("/loginenter",function(req,res){
 
 // compose button will be placed on outbox page and then to the compose page and then from the compose page will be send
 app.post('/send', (req, res) => {
-  console.log(req.body.sender);
+  console.log(req.body.message);
   var email= req.body.email;
   connection.query('SELECT * FROM users WHERE email = ?',[email], function (error, results, fields) {
     console.log(results);
@@ -315,7 +315,7 @@ app.post('/send', (req, res) => {
       <li>Phone:0222892939/li>
     </ul>
     <h3>Message</h3>
-    <p>${req.body.message}</p>`;
+    <pre>${req.body.message}</pre>`;
 
   // create reusable transporter object using the default SMTP transport
   let transporter = nodemailer.createTransport({
