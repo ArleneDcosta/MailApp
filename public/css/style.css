@@ -429,3 +429,8 @@ a.link {
   }
   
 }
+
+pre{
+  background-color: white;
+  border:none;
+}
