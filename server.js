@@ -48,6 +48,7 @@ app.get("/",function(req,res){
     res.render("login");
 });
 app.post("/register",function(req,res){
+  console.log(req.body.email);
   var today = new Date();
   let hash = bcrypt.hashSync(req.body.password,12);
   var users={
@@ -88,9 +89,21 @@ transporter.sendMail(mailOptions, (error, info) => {
         "failed":"error ocurred"
       })
     }else{
-      console.log('The solution is: ', results);
-      res.render('home', {msg:'Email has been sent'});
+      console.log("successfully Inserted!!!!!");
     }
+    
+      connection.query("select * from messages WHERE status='sent' or status='draft' and emailsender = ?",[req.body.email],function(err,result,fields){
+        if (err) throw err;
+        console.log('inside final ');
+        console.log(result);
+        console.log(result.length);
+        result.push(req.body.email);
+        result.push(req.body.password);
+        result.push(result[0].sendername);
+        result.push('All');
+        console.log(result);
+        res.render('outbox',{result:result});
+      });
     });
 
   
@@ -228,7 +241,7 @@ app.post("/draft",function(req,res){
   });
 });
 app.post("/outbox",function(req,res){
-  connection.query("select * from messages WHERE status='sent' or status='draft' and emailsender = ?",[req.body.email],function(err,result,fields){
+  connection.query("select * from messages WHERE emailsender = ?",[req.body.email],function(err,result,fields){
     if (err) throw err;
     console.log(result);
     console.log(result.length);
@@ -256,7 +269,7 @@ app.post("/loginenter",function(req,res){
     // console.log('The solution is: ', results);
     if(results.length >0){
       if(bcrypt.compareSync(req.body.password,results[0].password)){
-        connection.query("select * from messages WHERE status='sent' or status='draft' and emailsender = ?",[email],function(err,result,fields){
+        connection.query("select * from messages WHERE emailsender = ?",[email],function(err,result,fields){
           if (err) throw err;
           console.log(result);
           console.log(result.length);
@@ -397,7 +410,7 @@ app.post('/send', (req, res) => {
           console.log("successfully inserted");
           }
         });
-        connection.query("select * from messages WHERE status='sent' or status='draft' and emailsender = ?",[results[0].sender],function(err,result,fields){
+        connection.query("select * from messages WHERE emailsender = ?",[results[0].sender],function(err,result,fields){
           if (err) throw err;
           console.log('inside final ');
           console.log(result);
