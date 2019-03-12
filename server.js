@@ -2,6 +2,7 @@ var mysql = require('mysql');
 const path = require('path');
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt');
+var multer=require("multer");
 var connection = mysql.createConnection({
     host:'localhost',
     user:'root',
@@ -200,7 +201,7 @@ app.post("/delete",function(req,res){
     if (err) throw err;
     console.log('DELETION SUCCESSFUL!!!!');
   });
-  connection.query("select * from messages WHERE status='sent' or status='draft' and emailsender = ?",[req.body.email],function(err,result,fields){
+  connection.query("select * from messages WHERE emailsender = ?",[req.body.email],function(err,result,fields){
     if (err) throw err;
     console.log(result);
     console.log(result.length);
@@ -301,7 +302,7 @@ app.post("/loginenter",function(req,res){
 
 });
 
-
+app.use(multer({ dest:__dirname + '/public/uploads/'}).any('image'));
 // compose button will be placed on outbox page and then to the compose page and then from the compose page will be send
 app.post('/send', (req, res) => {
   console.log(req.body.message);
@@ -318,7 +319,9 @@ app.post('/send', (req, res) => {
     
       else{
         console.log(email);
-        const output = `
+        if(req.body.image==undefined)
+        {
+        var output = `
     <p>You have a new contact request</p>
     <h3>Contact Details</h3>
     <ul>  
@@ -329,7 +332,22 @@ app.post('/send', (req, res) => {
     </ul>
     <h3>Message</h3>
     <pre>${req.body.message}</pre>`;
-
+        }
+        else{
+          var output = `
+    <p>You have a new contact request</p>
+    <h3>Contact Details</h3>
+    <ul>  
+      <li>Name: XYZ</li>
+      <li>Company:Pehchan</li>
+      <li>Email:pehchan@gmail.com</li>
+      <li>Phone:0222892939/li>
+    </ul>
+    <h3>Message</h3>
+    <pre>${req.body.message}</pre>
+    <img src="${req.body.image}" width="25%"  height="25%">`;
+        }
+      
   // create reusable transporter object using the default SMTP transport
   let transporter = nodemailer.createTransport({
     // host: 'smtp.mail.gmail.com',
@@ -352,7 +370,7 @@ app.post('/send', (req, res) => {
       to: ''+results[0].client+'', // list of receivers
       subject: ''+req.body.subject+'', // Subject line
       text: ''+req.body.text+'', // plain text body
-      html: output // html body
+      html:output // html body
   };
   var today = new Date();
   var messages={
@@ -361,6 +379,7 @@ app.post('/send', (req, res) => {
     "emailsender":results[0].sender,
     "status":'sent',
     "Messages":req.body.message,
+    "image":req.body.image,
     "toreceiver":mailOptions.to,
     "subject":mailOptions.subject,
     "text":mailOptions.text,
@@ -372,6 +391,7 @@ app.post('/send', (req, res) => {
     "emailsender":results[0].sender,
     "status":'failed',
     "Messages":req.body.message,
+    "image":req.body.image,
     "toreceiver":mailOptions.to,
     "subject":mailOptions.subject,
     "text":mailOptions.text,

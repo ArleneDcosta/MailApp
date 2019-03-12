@@ -19,7 +19,7 @@
       <div class="modal-content">
         <span class="close">&times;</span>
         <div class="table-responsive">
-          <form method="POST" action="/send">
+          <form method="POST" action="/send" enctype="multipart/form-data">
             <table class="table table-bordered">
               <tbody>
                 <tr>
@@ -37,6 +37,7 @@
                   
                   <textarea rows="4" cols="50" name="message" id="message">Enter your message:</textarea></td>
                 </tr>
+                <tr><input type="text"  id="image" placeholder="Add image if necessary" name="image"></tr>
               </tbody>
                
 
@@ -129,7 +130,7 @@
                                             <!-- <img src="{{image}}" width="4%" height="4%" > -->
                                             
                                               <!-- <img src="{{image}}" width="4%" height="4%" > -->
-                                               <!-- <img src="{{image}}" width="4%" height="4%" > -->
+                                              
                                                <tr class="btn" id="myBtn1" onclick="show('click<%=i%>')">
                                                   <form id="form" action="/route" method="POST">
                                                     <input type="hidden"  name="password" value=<%=result[result.length-3] %>>
@@ -141,6 +142,7 @@
                                                   <td><i class="fa fa-star inbox-started"></i><%=result[i].subject %></td>
                                                   <td><%=result[i].text %></td>
                                                   <td><%=result[i].date %></td>
+                                                  
                                                   <button id="click<%=i%>" type="submit" style="display:none"></button>
                                                 </form>
                                                </tr>
