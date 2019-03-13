@@ -146,6 +146,7 @@ app.post("/senddraft",function(req,res){
     "toreceiver":req.body.toreceiver,
     "emailsender":req.body.email,
     "sendername":req.body.sender,
+    "image":req.body.image,
     "status":"draft",
     "date":today,
     "subject":req.body.subject,
