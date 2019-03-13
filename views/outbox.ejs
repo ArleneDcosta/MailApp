@@ -13,7 +13,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="public/css/style.css">
 </head>
-<body>    
+<body class="bg-image">    
     <div id="modal" class="modal">
       <!-- Modal content -->
       <div class="modal-content">
@@ -37,7 +37,7 @@
                   
                   <textarea rows="4" cols="50" name="message" id="message">Enter your message:</textarea></td>
                 </tr>
-                <tr><td><input type="text"  id="image" placeholder="Add image if necessary" name="image"><td>/tr>
+                <tr><td><input type="text"  id="image" placeholder="Add image if necessary" name="image"><td></tr>
               </tbody>
                
 
@@ -53,6 +53,7 @@
             <textarea style="display:none"rows="4" cols="50" name="fromsender" ><%=result[0].fromsender%></textarea>
             <input type="hidden" name="toreceiver" value=<%=result[0].toreceiver %>>
             <textarea style="display:none"rows="20" cols="100" name="sender" ><%=result[result.length-2]%></textarea>
+            <input type="hidden"  id="image1" placeholder="Add image if necessary" name="image">
             <input type="hidden" name="subject" id="sub1">
             <input type="hidden" name="text" id="text1">
             <textarea style="display:none" type="hidden" rows="4" cols="50" name="message" id="message1">Enter your message:</textarea>
@@ -99,156 +100,212 @@
           </div>
         </div>
         </div>
-            <div class="col-lg-9 col-md-9 col-sm-12">
-                
-                    
-                    
+        <div class="col-lg-9 col-md-9 col-sm-12">
+          <div class="tab-content">
+            <% if (result[result.length-1]=='sent'){ %>
+            <div class="new-style">
+                                    <!-- Nav tabs -->
+                      <ul class="nav nav-tabs">
+                      <li class="active"><a href="#home" data-toggle="tab"><span class="glyphicon glyphicon-inbox">
+                        </span>sent</a>
+                      </li>
+                  </ul>
+              
+              <div id="sent" class="container tab-pane active" value="sent">
+                  
+                  <br>
+                  <table class="table">
+                      <tr class="abc">
+                           <ul class="pagination justify-content-end">
+                              <li class="page-item"><span>1-50 of 234</span></li>
+                              <li class="page-item">
+                                  <a class="btn" href="#"><i class="fa fa-angle-left  pagination-left"></i></a>
+                              </li>
+                              <li class="page-item">
+                                  <a class="btn" href="#"><i class="fa fa-angle-right pagination-right"></i></a>
+                               </li>
+                          </ul>
+                      </tr>
+                      <div class="list-group">
+                        <% for(var i=0;i< result.length-4;i++) {  %>
+                        
+                          <a href="#" class="list-group-item" onclick="show('click<%=i%>')">
+                              <form id="form" action="/route" method="POST">
+                                  <input type="hidden"  name="password" value=<%=result[result.length-3] %>>
+                                  <input type="hidden" name="email" value=<%=result[result.length-4] %>>
+                                  <input type="hidden" name="sender" value="<%=result[i].sendername%>" >
+                                <input type="hidden" name="status" value="<%=result[i].status%>" >
+                                  <textarea style="display:none" name="message" ><%=result[i].Messages%></textarea>
+                                  <!--<td><input type="checkbox" class="mail-checkbox"><%=result[i].sendername%></td>
+                                <td><i class="fa fa-star inbox-started"></i><%=result[i].subject %></td>
+                                <td><%=result[i].text %></td>
+                                <td><%=result[i].date %></td>-->
+                                <button id="click<%=i%>" type="submit" style="display:none"></button>
+                              </form>
+                              <div class="checkbox">
+                                <label>
+                                  <input type="checkbox">
+                                </label>
+                              </div>
+                              <span class="glyphicon glyphicon-star-empty"></span>
+                              <span class="name" style="min-width: 120px;display: inline-block;"><%=result[i].sendername%></span> 
+                              <span class=""><%=result[i].Messages%></span>
+                              <span class="text-muted" style="font-size: 11px;">-<%=result[i].subject %></span>
+                              <span class="badge"><%=result[i].date %></span> 
+                              <span class="pull-right">
+                              <!--<span class="glyphicon glyphicon-paperclip">
+                              </span>-->
+                              </span>
+                          </a>
+                        <% } %>  
+                        </div>
                       
                           
-                    
-                <div class="tab-content">
-                  <% if (result[result.length-1]=='sent'){ %>
-                    
-                    <div id="sent" class="container tab-pane active" value="sent">
-                        <div class="bg "><br>SENT MESSAGES</div>
-                        <br>
-                        <table class="table">
-                            <tr class="abc">
-                                 <ul class="pagination justify-content-end">
-                                    <li class="page-item"><span>1-50 of 234</span></li>
-                                    <li class="page-item">
-                                        <a class="btn" href="#"><i class="fa fa-angle-left  pagination-left"></i></a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="btn" href="#"><i class="fa fa-angle-right pagination-right"></i></a>
-                                     </li>
-                                </ul>
-                            </tr>
-                            
-                                <% for(var i=0;i< result.length-4;i++) {  %>
-                                  
-                                            <!-- <img src="{{image}}" width="4%" height="4%" > -->
-                                            
-                                              <!-- <img src="{{image}}" width="4%" height="4%" > -->
-                                              
-                                               <tr class="btn" id="myBtn1" onclick="show('click<%=i%>')">
-                                                  <form id="form" action="/route" method="POST">
-                                                    <input type="hidden"  name="password" value=<%=result[result.length-3] %>>
-                                                    <input type="hidden" name="email" value=<%=result[result.length-4] %>>
-                                                  <input type="hidden" name="sender" value="<%=result[i].sendername%>" >
-                                                  <input type="hidden" name="status" value="<%=result[i].status%>" >
-                                                  <textarea style="display:none" name="message" ><%=result[i].Messages%></textarea>
-                                                  <td><input type="checkbox" class="mail-checkbox"><%=result[i].sendername%></td>
-                                                  <td><i class="fa fa-star inbox-started"></i><%=result[i].subject %></td>
-                                                  <td><%=result[i].text %></td>
-                                                  <td><%=result[i].date %></td>
-                                                  
-                                                  <button id="click<%=i%>" type="submit" style="display:none"></button>
-                                                </form>
-                                               </tr>
-                                        
-                                  <% } %> 
-                              
-                          
-                           
-                        </table>
-                    </div>
-                    <% }else if(result[result.length-1]=='draft'){ %>
-                      <div id="draft" class="container tab-pane active" value="draft">
-                        <div class="bg "><br>DRAFT MESSAGES</div>
-                        <br>
-                        <table class="table">
-                            <tr class="abc">
-                                 <ul class="pagination justify-content-end">
-                                    <li class="page-item"><span>1-50 of 234</span></li>
-                                    <li class="page-item">
-                                        <a class="btn" href="#"><i class="fa fa-angle-left  pagination-left"></i></a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="btn" href="#"><i class="fa fa-angle-right pagination-right"></i></a>
-                                     </li>
-                                </ul>
-                            </tr>
-                            
-                                <% for(var i=0;i< result.length-4;i++) {  %>
-                                      
-                                              <!-- <img src="{{image}}" width="4%" height="4%" > -->
-                                              <tr class="btn" id="myBtn1" onclick="show('click<%=i%>')">
-                                                  <form id="form" action="/route" method="POST">
-                                                    <input type="hidden"  name="password" value=<%=result[result.length-3] %>>
-                                                    <input type="hidden" name="email" value=<%=result[result.length-4] %>>
-                                                  <input type="hidden" name="sender" value="<%=result[i].sendername%>" >
-                                                  <input type="hidden" name="status" value="<%=result[i].status%>" >
-                                                  <textarea style="display:none" name="message" ><%=result[i].Messages%></textarea>
-                                                  <td><input type="checkbox" class="mail-checkbox"><%=result[i].sendername%></td>
-                                                  <td><i class="fa fa-star inbox-started"></i><%=result[i].subject %></td>
-                                                  <td><%=result[i].text %></td>
-                                                  <td><%=result[i].date %></td>
-                                                  <button id="click<%=i%>" type="submit" style="display:none"></button>
-                                                </form>
-                                               </tr>
-                                           
-                                            
-                                           
-                                          
-                                  <% } %> 
-                        </table>
-                    </div>
-
-                    
-                    <% }else{ %>
-                      <div id="sent" class="container tab-pane active" value="sent">
-                          <div class="bg "><br>OUTBOX</div>
-                          <br>
-                          <table class="table">
-                              <tr class="abc">
-                                   <ul class="pagination justify-content-end">
-                                      <li class="page-item"><span>1-50 of 234</span></li>
-                                      <li class="page-item">
-                                          <a class="btn" href="#"><i class="fa fa-angle-left  pagination-left"></i></a>
-                                      </li>
-                                      <li class="page-item">
-                                          <a class="btn" href="#"><i class="fa fa-angle-right pagination-right"></i></a>
-                                       </li>
-                                  </ul>
-                              </tr>
-                              
-                                  <% for(var i=0;i< result.length-4;i++) {  %>
-                                  
-                                              <!-- <img src="{{image}}" width="4%" height="4%" > -->
-                                               <!-- <img src="{{image}}" width="4%" height="4%" > -->
-                                               
-                                               
-                                                
-                                               <tr class="btn" id="myBtn1" onclick="show('click<%=i%>')">
-                                                  <form id="form" action="/route" method="POST">
-                                                    <input type="hidden"  name="password" value=<%=result[result.length-3] %>>
-                                                    <input type="hidden" name="email" value=<%=result[result.length-4] %>>
-                                                  <input type="hidden" name="sender" value="<%=result[i].sendername%>" >
-                                                  <input type="hidden" name="status" value="<%=result[i].status%>" >
-                                                  <textarea style="display:none" name="message" ><%=result[i].Messages%></textarea>
-                                                  <td><input type="checkbox" class="mail-checkbox"><%=result[i].sendername%></td>
-                                                  <td><i class="fa fa-star inbox-started"></i><%=result[i].subject %></td>
-                                                  <td><%=result[i].text %></td>
-                                                  <td><%=result[i].date %></td>
-                                                  <button id="click<%=i%>" type="submit" style="display:none"></button>
-                                                </form>
-                                               </tr>
-                                                  
-                                               
-                                  <% } %>    
-                                                                 
-                          </table>
-                        </div>
-                      <% } %>
-                  </div>
+                     
+                  </table>
               </div>
-          </div>
-      </div>
-      </div>
-      </div>              
-                                              
-                                             
+              <% }else if(result[result.length-1]=='draft'){ %>
+              <div class="new-style">
+                                    <!-- Nav tabs -->
+                      <ul class="nav nav-tabs">
+                      <li class="active"><a href="#home" data-toggle="tab"><span class="glyphicon glyphicon-inbox">
+                        </span>draft</a>
+                      </li>
+                  </ul>
+                <div id="draft" class="container tab-pane active" value="draft">
+                  
+                  <br>
+                  <table class="table">
+                      <tr class="abc">
+                           <ul class="pagination justify-content-end">
+                              <li class="page-item"><span>1-50 of 234</span></li>
+                              <li class="page-item">
+                                  <a class="btn" href="#"><i class="fa fa-angle-left  pagination-left"></i></a>
+                              </li>
+                              <li class="page-item">
+                                  <a class="btn" href="#"><i class="fa fa-angle-right pagination-right"></i></a>
+                               </li>
+                          </ul>
+                      </tr>
+                      <div class="list-group">
+                          <% for(var i=0;i< result.length-4;i++) {  %>
+                                
+                                       
+                          <a href="#" class="list-group-item" onclick="show('click<%=i%>')">
+                          <form id="form" action="/route" method="POST">
+                              <input type="hidden"  name="password" value=<%=result[result.length-3] %>>
+                              <input type="hidden" name="email" value=<%=result[result.length-4] %>>
+                              <input type="hidden" name="sender" value="<%=result[i].sendername%>" >
+                              <input type="hidden" name="status" value="<%=result[i].status%>" >
+                              <textarea style="display:none" name="message" ><%=result[i].Messages%></textarea>
+                              <!--<td><input type="checkbox" class="mail-checkbox"><%=result[i].sendername%></td>
+                            <td><i class="fa fa-star inbox-started"></i><%=result[i].subject %></td>
+                            <td><%=result[i].text %></td>
+                            <td><%=result[i].date %></td>-->
+                            <button id="click<%=i%>" type="submit" style="display:none"></button>
+                          </form>
+                          <div class="checkbox">
+                            <label>
+                              <input type="checkbox">
+                            </label>
+                          </div>
+                          <span class="glyphicon glyphicon-star-empty"></span>
+                          <span class="name" style="min-width: 120px;display: inline-block;"><%=result[i].sendername%></span> 
+                          <span class=""><%=result[i].Messages%></span>
+                          <span class="text-muted" style="font-size: 11px;">-<%=result[i].subject %></span>
+                          <span class="badge"><%=result[i].date %></span> 
+                          <span class="pull-right">
+                          <!--<span class="glyphicon glyphicon-paperclip">
+                          </span>-->
+                          </span>
+                      </a>
+                                      
+                                     
+                                    
+                            <% } %> 
+                  </div>
+                  </table>
+              </div>
+
+              
+              <% } else {%>
+                <div class="new-style">
+                                    <!-- Nav tabs -->
+                      <ul class="nav nav-tabs">
+                      <li class="active"><a href="#home" data-toggle="tab"><span class="glyphicon glyphicon-inbox">
+                        </span>Outbox</a>
+                      </li>
+                  </ul>
+                  <!-- Tab panes -->
+                  <div class="tab-content">
+                    
+                    <div class="tab-pane fade in active" id="home">
+                        <div>
+                        <table class="table" > 
+                          <tr class="abc">
+                              <ul class="pagination justify-content-end">
+                                  <li class="page-item"><span>1-50 of 234</span></li>
+                                  <li class="page-item">
+                                      <a class="btn" href="#"><i class="fa fa-angle-left  pagination-left"></i></a>
+                                  </li>
+                                  <li class="page-item">
+                                      <a class="btn" href="#"><i class="fa fa-angle-right pagination-right"></i></a>
+                                  </li>
+                              </ul>
+                          </tr>
+                        </table>
+                        </div>
+                        <div class="list-group">
+                        <% for(var i=0;i< result.length-4;i++) {  %>
+                        
+                          <a href="#" class="list-group-item" onclick="show('click<%=i%>')">
+                              <form id="form" action="/route" method="POST">
+                                  <input type="hidden"  name="password" value=<%=result[result.length-3] %>>
+                                  <input type="hidden" name="email" value=<%=result[result.length-4] %>>
+                                  <input type="hidden" name="sender" value="<%=result[i].sendername%>" >
+                                <input type="hidden" name="status" value="<%=result[i].status%>" >
+                                  <textarea style="display:none" name="message" ><%=result[i].Messages%></textarea>
+                                  <!--<td><input type="checkbox" class="mail-checkbox"><%=result[i].sendername%></td>
+                                <td><i class="fa fa-star inbox-started"></i><%=result[i].subject %></td>
+                                <td><%=result[i].text %></td>
+                                <td><%=result[i].date %></td>-->
+                                <button id="click<%=i%>" type="submit" style="display:none"></button>
+                              </form>
+                              <div class="checkbox">
+                                <label>
+                                  <input type="checkbox">
+                                </label>
+                              </div>
+                              <span class="glyphicon glyphicon-star-empty"></span>
+                              <span class="name" style="min-width: 120px;display: inline-block;"><%=result[i].sendername%></span> 
+                              <span class=""><%=result[i].Messages%></span>
+                              <span class="text-muted" style="font-size: 11px;">-<%=result[i].subject %></span>
+                              <span class="badge"><%=result[i].date %></span> 
+                              <span class="pull-right">
+                              <!--<span class="glyphicon glyphicon-paperclip">
+                              </span>-->
+                              </span>
+                          </a>
+                        <% } %> 
+                        </table> 
+                        </div>
+                    </div>
+                    
+                  </div>
+
+                </div>
+              <% }%>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>              
+                                        
+                                       
+                                      
+
+
                                             
    
     
@@ -291,7 +348,9 @@ window.onclick = function(event) {
     var q = document.getElementById("text").value;
     document.getElementById("text1").value=q;
     var r = document.getElementById("message").value;
-    document.getElementById("message1").value=r
+    document.getElementById("message1").value=r;
+    var s = document.getElementById("image").value;
+    document.getElementById("image1").value=s;
     document.getElementById("click").click();
   }
   }

@@ -140,6 +140,7 @@ app.post("/sent",function(req,res){
 });
 app.post("/senddraft",function(req,res){
   var today = new Date();
+  console.log(req.body.image);
   console.log("Reached");
   var messages = {
     "fromsender":req.body.fromsender,
@@ -153,7 +154,19 @@ app.post("/senddraft",function(req,res){
     "text":req.body.text,
     "Messages":req.body.message
   };
-  if (req.body.subject!=''){
+  var messages1 = {
+    "fromsender":req.body.fromsender,
+    "toreceiver":req.body.toreceiver,
+    "emailsender":req.body.email,
+    "sendername":req.body.sender,
+    "image":'undefined',
+    "status":"draft",
+    "date":today,
+    "subject":req.body.subject,
+    "text":req.body.text,
+    "Messages":req.body.message
+  };
+  if (req.body.subject!='' && req.body.image!=null){
   connection.query('INSERT INTO messages SET ?',messages, function (error, results, fields) {
     console.log(results);
     if (error) {
@@ -161,13 +174,25 @@ app.post("/senddraft",function(req,res){
       res.send({
         "code":400,
         "failed":"error ocurred"
-      })
+      })}else{
+        console.log("successfully inserted");
+        }
+      });
+    }else if(req.body.subject!='' && req.body.image==null){
+      connection.query('INSERT INTO messages SET ?',messages1, function (error, results, fields) {
+        console.log(results);
+        if (error) {
+          console.log("error ocurred",error);
+          res.send({
+            "code":400,
+            "failed":"error ocurred"
+          })
     }else{
       console.log("successfully inserted");
       }
     });
   }
-    connection.query("select * from messages WHERE status='sent' or status='draft' and emailsender = ?",[req.body.email],function(err,result,fields){
+    connection.query("select * from messages WHERE emailsender = ?",[req.body.email],function(err,result,fields){
       if (err) throw err;
       console.log(result);
       console.log(result.length);
@@ -398,6 +423,18 @@ app.post('/send', (req, res) => {
     "text":mailOptions.text,
     "date":today
   }
+  var messages2={
+    "fromsender":mailOptions.from,
+    "sendername":results[0].Name,
+    "emailsender":results[0].sender,
+    "status":'sent',
+    "Messages":req.body.message,
+    "image":'undefined',
+    "toreceiver":mailOptions.to,
+    "subject":mailOptions.subject,
+    "text":mailOptions.text,
+    "date":today
+  }
 
   // send mail with defined transport object
   transporter.sendMail(mailOptions, (error, info) => {
@@ -418,7 +455,7 @@ app.post('/send', (req, res) => {
       }
       console.log('Message sent: %s', info.messageId);   
       console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-
+      if(req.body.image!=null){
       connection.query('INSERT INTO messages SET ?',messages, function (error, results, fields) {
         console.log(results);
         if (error) {
@@ -431,6 +468,20 @@ app.post('/send', (req, res) => {
           console.log("successfully inserted");
           }
         });
+      }else{
+        connection.query('INSERT INTO messages SET ?',messages2, function (error, results, fields) {
+          console.log(results);
+          if (error) {
+            console.log("error ocurred",error);
+            res.send({
+              "code":400,
+              "failed":"error ocurred"
+            })
+          }else{
+            console.log("successfully inserted");
+            }
+          });
+      }
         connection.query("select * from messages WHERE emailsender = ?",[results[0].sender],function(err,result,fields){
           if (err) throw err;
           console.log('inside final ');

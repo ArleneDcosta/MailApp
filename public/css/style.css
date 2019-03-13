@@ -196,7 +196,7 @@ a{
   text-align: left;
 }
 .bg-image{
-  background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqQ4-ZInsydb6k4JBKL7NDxegGkfZM-TvO10S9c2ntF1BWRdGE");
+  background-image: url("https://www.pixelstalk.net/wp-content/uploads/images1/Best-daisy-wallpaper-hd.jpg");
       background-repeat: no-repeat;
   background-size: cover;
 }
@@ -393,6 +393,22 @@ a.link {
   text-align: left;
   padding: 10px;
 }
+
+/**
+Content styles
+*/
+.tab-pane .list-group-item:first-child {border-top-right-radius: 0px;border-top-left-radius: 0px;}
+.tab-pane .list-group-item:last-child {border-bottom-right-radius: 0px;border-bottom-left-radius: 0px;}
+.tab-pane .list-group .checkbox { display: inline-block;margin: 0px; }
+.tab-pane .list-group input[type="checkbox"]{ margin-top: 2px; }
+.tab-pane .list-group .glyphicon { margin-right:5px; }
+.tab-pane .list-group .glyphicon:hover { color:#FFBC00; }
+a.list-group-item.read { color: #222;background-color: #F3F3F3; }
+hr { margin-top: 5px;margin-bottom: 10px; }
+.nav-pills>li>a {padding: 5px 10px;}
+
+/**************************************/
+
 @media (max-width: 767px) {
   .button1{
     width:100%;
@@ -434,3 +450,7 @@ pre{
   background-color: white;
   border:none;
 }
+.list-group{
+  background: rgba(255,255,255,0.7);
+}
+

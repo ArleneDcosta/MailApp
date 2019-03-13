@@ -44,9 +44,9 @@
 
             </table>
           <button type="button" onclick="this.form.submit()">Send</button>
-          
+        </form>
 
-          </form>
+         
           <form method="POST" action="/senddraft">
             <button style="display: none" id="click" onclick="this.form.submit()"></button>
             <input type="hidden"  name="password" value=<%=result[result.length-3] %>>
@@ -54,6 +54,7 @@
             <textarea style="display:none"rows="4" cols="50" name="fromsender" ><%=result[0].fromsender%></textarea>
             <input type="hidden" name="toreceiver" value=<%=result[0].toreceiver %>>
             <textarea style="display:none"rows="4" cols="50" name="sender" ><%=result[result.length-2]%></textarea>
+            <input type="hidden"  id="image1" placeholder="Add image if necessary" name="image">
             <input type="hidden" name="subject" id="sub1">
             <input type="hidden" name="text" id="text1">
             <textarea style="display:none" type="hidden" rows="4" cols="50" name="message" id="message1">Enter your message:</textarea>
@@ -145,6 +146,7 @@
                   
                   <textarea rows="4" cols="50" name="message" id="message"><%=result[0].Messages%></textarea></td>
                 </tr>
+                <tr><td><input type="text"  id="image" placeholder="Add image if necessary" name="image" value="<%=result[0].image %>"> </td></tr>
                  </tbody>
                
 
@@ -192,7 +194,9 @@ window.onclick = function(event) {
     var q = document.getElementById("text").value;
     document.getElementById("text1").value=q;
     var r = document.getElementById("message").value;
-    document.getElementById("message1").value=r
+    document.getElementById("message1").value=r;
+    var s = document.getElementById("image").value;
+    document.getElementById("image1").value=s;
     document.getElementById("click").click();
   }
   
