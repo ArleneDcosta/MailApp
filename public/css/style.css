@@ -454,3 +454,16 @@ pre{
   background: rgba(255,255,255,0.7);
 }
 
+.text-muted{
+  display: inline-block;
+  width: 120px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+ pre{
+   white-space: pre-wrap;
+   
+  
+  word-break: break-word; 
+ }

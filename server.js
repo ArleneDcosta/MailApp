@@ -1,5 +1,6 @@
 var mysql = require('mysql');
 const path = require('path');
+const fs = require('fs');
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt');
 var multer=require("multer");
@@ -166,7 +167,7 @@ app.post("/senddraft",function(req,res){
     "text":req.body.text,
     "Messages":req.body.message
   };
-  if (req.body.subject!='' && req.body.image!=null){
+  if (req.body.subject!='' && req.body.image!=''){
   connection.query('INSERT INTO messages SET ?',messages, function (error, results, fields) {
     console.log(results);
     if (error) {
@@ -178,7 +179,7 @@ app.post("/senddraft",function(req,res){
         console.log("successfully inserted");
         }
       });
-    }else if(req.body.subject!='' && req.body.image==null){
+    }else if(req.body.subject!='' && req.body.image==''){
       connection.query('INSERT INTO messages SET ?',messages1, function (error, results, fields) {
         console.log(results);
         if (error) {
@@ -332,6 +333,14 @@ app.use(multer({ dest:__dirname + '/public/uploads/'}).any('image'));
 // compose button will be placed on outbox page and then to the compose page and then from the compose page will be send
 app.post('/send', (req, res) => {
   console.log(req.body.message);
+  var dest_file = path.join(req.files[0].destination, req.files[0].originalname);
+    var writerStream = fs.createWriteStream(dest_file);
+
+    // var stream = readerStream.pipe(writerStream);
+    // stream.on('finish', function(){
+    //     fs.unlink(req.files[0].path);
+    // });
+  console.log(req.files);
   var email= req.body.email;
   connection.query('SELECT * FROM users WHERE email = ?',[email], function (error, results, fields) {
     console.log(results);
@@ -370,8 +379,8 @@ app.post('/send', (req, res) => {
       <li>Phone:0222892939/li>
     </ul>
     <h3>Message</h3>
-    <pre>${req.body.message}</pre>
-    <img src="${req.body.image}" width="25%"  height="25%">`;
+    <pre>${req.body.message}</pre>`;
+    
         }
       
   // create reusable transporter object using the default SMTP transport
@@ -389,13 +398,15 @@ app.post('/send', (req, res) => {
     // }
   });
   connect.query('SELECT * FROM client WHERE sender = ?',[results[0].email], function (error, results, fields) {
-
-  // setup email data with unicode symbols
-  let mailOptions = {
+    if(req.files.length!=0)
+  {
+    attachment = [{ filename:req.files[0].originalname,path:__dirname + '/public/uploads/'+req.files[0].filename}];
+    var mailOptions = {
       from: '"'+results[0].Name+'"<'+results[0].sender +'>', // sender address
       to: ''+results[0].client+'', // list of receivers
       subject: ''+req.body.subject+'', // Subject line
       text: ''+req.body.text+'', // plain text body
+      attachments : attachment,
       html:output // html body
   };
   var today = new Date();
@@ -405,12 +416,38 @@ app.post('/send', (req, res) => {
     "emailsender":results[0].sender,
     "status":'sent',
     "Messages":req.body.message,
-    "image":req.body.image,
+    "image":req.files[0].filename,
+    "imagename":req.files[0].originalname,
     "toreceiver":mailOptions.to,
     "subject":mailOptions.subject,
     "text":mailOptions.text,
     "date":today
   }
+  }
+    else{
+  // setup email data with unicode symbols
+  var mailOptions = {
+    from: '"'+results[0].Name+'"<'+results[0].sender +'>', // sender address
+    to: ''+results[0].client+'', // list of receivers
+    subject: ''+req.body.subject+'', // Subject line
+    text: ''+req.body.text+'', // plain text body
+    html:output // html body
+};
+var today = new Date();
+var messages={
+  "fromsender":mailOptions.from,
+  "sendername":results[0].Name,
+  "emailsender":results[0].sender,
+  "status":'sent',
+  "Messages":req.body.message,
+  "image":'undefined',
+  "imagename":'undefined',
+  "toreceiver":mailOptions.to,
+  "subject":mailOptions.subject,
+  "text":mailOptions.text,
+  "date":today
+}}
+ 
   var messages1={
     "fromsender":mailOptions.from,
     "sendername":results[0].Name,
@@ -423,18 +460,7 @@ app.post('/send', (req, res) => {
     "text":mailOptions.text,
     "date":today
   }
-  var messages2={
-    "fromsender":mailOptions.from,
-    "sendername":results[0].Name,
-    "emailsender":results[0].sender,
-    "status":'sent',
-    "Messages":req.body.message,
-    "image":'undefined',
-    "toreceiver":mailOptions.to,
-    "subject":mailOptions.subject,
-    "text":mailOptions.text,
-    "date":today
-  }
+ 
 
   // send mail with defined transport object
   transporter.sendMail(mailOptions, (error, info) => {
@@ -455,7 +481,7 @@ app.post('/send', (req, res) => {
       }
       console.log('Message sent: %s', info.messageId);   
       console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-      if(req.body.image!=null){
+      
       connection.query('INSERT INTO messages SET ?',messages, function (error, results, fields) {
         console.log(results);
         if (error) {
@@ -468,20 +494,7 @@ app.post('/send', (req, res) => {
           console.log("successfully inserted");
           }
         });
-      }else{
-        connection.query('INSERT INTO messages SET ?',messages2, function (error, results, fields) {
-          console.log(results);
-          if (error) {
-            console.log("error ocurred",error);
-            res.send({
-              "code":400,
-              "failed":"error ocurred"
-            })
-          }else{
-            console.log("successfully inserted");
-            }
-          });
-      }
+      
         connection.query("select * from messages WHERE emailsender = ?",[results[0].sender],function(err,result,fields){
           if (err) throw err;
           console.log('inside final ');

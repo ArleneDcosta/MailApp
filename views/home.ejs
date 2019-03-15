@@ -38,7 +38,7 @@
                   
                   <textarea rows="4" cols="50" name="message" id="message">Enter your message:</textarea></td>
                 </tr>
-                <tr><td><input type="text" id="image" placeholder="Add image if necessary" name="image"></td></tr>
+                <tr><td><input type="file" class="form-control" id="image" placeholder="Choose Profile Picture" name="image"></td></tr>
               </tbody>
                
 
@@ -95,7 +95,7 @@
                       <form method="POST" action="/outbox">
                         <input type="hidden" name="password" value=<%=result[result.length-3] %>>
                         <input type="hidden" name="email" value=<%=result[result.length-4] %>>
-                        <button  id="button" type="submit" class="link" onclick="this.form.submit()"><i class="fa fa-fw fa-envelope"></i>Outbox</button>
+                        <button  id="button" type="submit" class="link" onclick="this.form.submit()"><i class="fa fa-fw fa-envelope"></i>All</button>
                       </form>
                     </li>
                 </ul>
@@ -143,7 +143,9 @@
                         </ul>
                         <h3 class="text-left"> Message</h3>
                         <pre><%=result[0].Messages%></pre>
-                        <img src="{{<%=result[0].image %>}}" >
+                        <% if(result[0].image!='undefined'){ %>
+                          <a href="./public/uploads/<%=result[0].image%>" download><%=result[0].imagename%></a>
+                        <% } %>
                     </div>
                 
                     <% } else if(result[0].status == 'draft'){ %>
@@ -188,13 +190,14 @@
                             <li>Name: XYZ</li>
                             <li>Company:Pehchan</li>
                             <li>Email:pehchan@gmail.com</li>
-                            <li>Phone:0222892939/li>
+                            <li>Phone:0222892939</li>
                           </ul>
                           <h3 class="text-left"> Message</h3>
+                          
                           <pre><%=result[0].Messages%></pre>
-                         
+                          <!-- <a href="./" download>{{fileName}}</a> -->
                       </div>
-                      <img src="<%= result[0].image %>">
+                      
                       <% } %>
                 </div>
             </div>
