@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head></head>
+    <body>
+        <div class="container">
+            <form action="/register" method="POST">
+                <input type="hidden" name="firstname" value="<%=users.firstname %>">
+                <input type="hidden" name="lastname" value="<%=users.lastname %>">
+                <input type="hidden" name="email" value="<%=users.email%>">
+                <input type="hidden" name="password" value="<%=users.password %>">
+                <input type="hidden" name="phone_no" value="<%=users.phoneno %>">
+                <input type="hidden" name="random" value="<%=users.random %>">
+                <label>Enter the verification code received in your email</label>
+                <input type="text" name="random1">
+                <button type="button" onclick="this.form.submit()">Verify</button>
+            </form>
+        </div>
+
+    </body>
+</html>

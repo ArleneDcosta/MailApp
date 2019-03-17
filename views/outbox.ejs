@@ -46,14 +46,14 @@
           
 
           </form>
-          <form method="POST" action="/senddraft">
+          <form method="POST" action="/senddraft" enctype="multipart/form-data">
             <button style="display: none" id="click" onclick="this.form.submit()" ></button>
             <input type="hidden"  name="password" value=<%=result[result.length-3] %>>
             <input type="hidden" name="email" value=<%=result[result.length-4] %>>
             <textarea style="display:none"rows="4" cols="50" name="fromsender" ><%=result[0].fromsender%></textarea>
             <input type="hidden" name="toreceiver" value=<%=result[0].toreceiver %>>
             <textarea style="display:none"rows="20" cols="100" name="sender" ><%=result[result.length-2]%></textarea>
-            <input type="hidden"  id="image1" placeholder="Add image if necessary" name="image">
+            
             <input type="hidden" name="subject" id="sub1">
             <input type="hidden" name="text" id="text1">
             <textarea style="display:none" type="hidden" rows="4" cols="50" name="message" id="message1">Enter your message:</textarea>
@@ -349,8 +349,7 @@ window.onclick = function(event) {
     document.getElementById("text1").value=q;
     var r = document.getElementById("message").value;
     document.getElementById("message1").value=r;
-    var s = document.getElementById("image").value;
-    document.getElementById("image1").value=s;
+    
     document.getElementById("click").click();
   }
   }

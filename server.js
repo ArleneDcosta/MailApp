@@ -50,39 +50,15 @@ app.get("/",function(req,res){
     res.render("login");
 });
 app.post("/register",function(req,res){
-  console.log(req.body.email);
-  var today = new Date();
-  let hash = bcrypt.hashSync(req.body.password,12);
   var users={
     "firstname":req.body.firstname,
     "lastname":req.body.lastname,
     "email":req.body.email,
-    "password":hash,
+    "password":req.body.password,
     "phoneno":req.body.phone_no
   }
-  const output='<p>Verified</p>';
-  let transporter = nodemailer.createTransport({
-    service:'Gmail',
-    auth: {
-        user: req.body.email, // generated ethereal user
-        pass: req.body.password  // generated ethereal password
-    }
-  });
-  let mailOptions = {
-    from: '"'+req.body.firstname+'"<'+req.body.email +'>', // sender address
-    to: ''+req.body.email+'', // list of receivers
-    subject: 'Verify', // Subject line
-    text: 'Verify', // plain text body
-    html: output // html body
-};
-transporter.sendMail(mailOptions, (error, info) => {
-  if (error) {
-     
-     res.send("Enter appropriate email and password");
-    return console.log(error);
-  }
-  console.log('Message sent: %s', info.messageId);   
-  console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+  var random = req.body.random;
+  if(random==req.body.random1){
   connection.query('INSERT INTO users SET ?',users, function (error, results, fields) {
     if (error) {
       console.log("error ocurred",error);
@@ -94,7 +70,7 @@ transporter.sendMail(mailOptions, (error, info) => {
       console.log("successfully Inserted!!!!!");
     }
     
-      connection.query("select * from messages WHERE status='sent' or status='draft' and emailsender = ?",[req.body.email],function(err,result,fields){
+      connection.query("select * from messages WHERE emailsender = ?",[req.body.email],function(err,result,fields){
         if (err) throw err;
         console.log('inside final ');
         console.log(result);
@@ -107,9 +83,53 @@ transporter.sendMail(mailOptions, (error, info) => {
         res.render('outbox',{result:result});
       });
     });
-
+  }
+});
+app.post("/sign",function(req,res){
+  console.log(req.body.email);
+  var today = new Date();
+  let hash = bcrypt.hashSync(req.body.password,12);
+  var users={
+    "firstname":req.body.firstname,
+    "lastname":req.body.lastname,
+    "email":req.body.email,
+    "password":hash,
+    "phoneno":req.body.phone_no
+  }
+  var random = Math.floor((Math.random));
+  var rand=Math.floor((Math.random() * 100000) + 184);
+  const output="<p>"+rand+"</p>";
+  users.random=rand;
+  let transporter = nodemailer.createTransport({
+    service:'Gmail',
+    auth: {
+        user: req.body.email, // generated ethereal user
+        pass: req.body.password  // generated ethereal password
+    },
+    tls:{
+      rejectUnauthorized:false
+    }
+  });
+  let mailOptions = {
+    from: '"'+req.body.firstname+'"<'+req.body.email +'>', // sender address
+    to: ''+req.body.email+'', // list of receivers
+    subject: 'Verify', // Subject line
+    text: 'Enter the below value to verify your account', // plain text body
+    html: output // html body
+};
+transporter.sendMail(mailOptions, (error, info) => {
+  if (error) {
+     
+     res.send("Enter appropriate email and password");
+    return console.log(error);
+  }
+  console.log('Message sent: %s', info.messageId);   
+  console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+  
   
 });
+console.log(users);
+res.render('register',{users:users});
 });
 
 app.get("/login",function(req,res){
@@ -128,18 +148,17 @@ app.post("/sent",function(req,res){
       })
     }else{
       console.log('Inside Sent emails');
-      console.log(result);
       result.push(req.body.email);
       result.push(req.body.password);
       result.push(result[0].sendername);
       result.push('sent');
-      console.log(result);
       res.render('outbox',{result:result});
     }
 
   });
 });
 app.post("/senddraft",function(req,res){
+  console.log(req.files);
   var today = new Date();
   console.log(req.body.image);
   console.log("Reached");
@@ -148,26 +167,16 @@ app.post("/senddraft",function(req,res){
     "toreceiver":req.body.toreceiver,
     "emailsender":req.body.email,
     "sendername":req.body.sender,
-    "image":req.body.image,
+    "image":"undefined",
+    "imagename":"undefined",
     "status":"draft",
     "date":today,
     "subject":req.body.subject,
     "text":req.body.text,
     "Messages":req.body.message
   };
-  var messages1 = {
-    "fromsender":req.body.fromsender,
-    "toreceiver":req.body.toreceiver,
-    "emailsender":req.body.email,
-    "sendername":req.body.sender,
-    "image":'undefined',
-    "status":"draft",
-    "date":today,
-    "subject":req.body.subject,
-    "text":req.body.text,
-    "Messages":req.body.message
-  };
-  if (req.body.subject!='' && req.body.image!=''){
+  
+  if (req.body.subject!=''){
   connection.query('INSERT INTO messages SET ?',messages, function (error, results, fields) {
     console.log(results);
     if (error) {
@@ -179,46 +188,26 @@ app.post("/senddraft",function(req,res){
         console.log("successfully inserted");
         }
       });
-    }else if(req.body.subject!='' && req.body.image==''){
-      connection.query('INSERT INTO messages SET ?',messages1, function (error, results, fields) {
-        console.log(results);
-        if (error) {
-          console.log("error ocurred",error);
-          res.send({
-            "code":400,
-            "failed":"error ocurred"
-          })
-    }else{
-      console.log("successfully inserted");
-      }
-    });
-  }
+    }
+  
     connection.query("select * from messages WHERE emailsender = ?",[req.body.email],function(err,result,fields){
       if (err) throw err;
-      console.log(result);
-      console.log(result.length);
       result.push(req.body.email);
       result.push(req.body.password);
       result.push(result[0].sendername);
-      console.log(result[0].sendername);
       result.push('All');
-      console.log(result);
       res.render('outbox',{result:result});
     });
 });
 
 app.post("/route",function(req,res){
   console.log(req.body);
-  connection.query("select * from messages WHERE sendername=? and Messages = ?",[req.body.sender,req.body.message],function(err,result,fields){
+  connection.query("select * from messages WHERE sendername=? and Messages = ? and status=?",[req.body.sender,req.body.message,req.body.status],function(err,result,fields){
     if (err) throw err;
-    console.log(result);
-    console.log(result.length);
     result.push(req.body.email);
     result.push(req.body.password);
     result.push(result[0].sendername);
-    console.log(result[0].sendername);
     result.push('All');
-    console.log(result);
     res.render('home',{result:result});
   });
 });
@@ -230,14 +219,10 @@ app.post("/delete",function(req,res){
   });
   connection.query("select * from messages WHERE emailsender = ?",[req.body.email],function(err,result,fields){
     if (err) throw err;
-    console.log(result);
-    console.log(result.length);
     result.push(req.body.email);
     result.push(req.body.password);
     result.push(result[0].sendername);
-    console.log(result[0].sendername);
     result.push('All');
-    console.log(result);
     res.render('outbox',{result:result});
   });
 });
@@ -247,9 +232,7 @@ app.post("/edit",function(req,res){
     result.push(req.body.email);
     result.push(req.body.password);
     result.push(result[0].sendername);
-    console.log(result[0].sendername);
     result.push('draft');
-    console.log(result);
     res.render('edit',{result:result});
   });
 
@@ -257,28 +240,20 @@ app.post("/edit",function(req,res){
 app.post("/draft",function(req,res){
   connection.query("select * from messages WHERE status='draft' and emailsender = ?",[req.body.email],function(err,result,fields){
     if (err) throw err;
-    console.log(result);
-    console.log(result.length);
     result.push(req.body.email);
     result.push(req.body.password);
     result.push(result[0].sendername);
-    console.log(result[0].sendername);
     result.push('draft');
-    console.log(result);
     res.render('outbox',{result:result});
   });
 });
 app.post("/outbox",function(req,res){
   connection.query("select * from messages WHERE emailsender = ?",[req.body.email],function(err,result,fields){
     if (err) throw err;
-    console.log(result);
-    console.log(result.length);
     result.push(req.body.email);
     result.push(req.body.password);
     result.push(result[0].sendername);
-    console.log(result[0].sendername);
     result.push('All');
-    console.log(result);
     res.render('outbox',{result:result});
   });
 });
@@ -299,14 +274,10 @@ app.post("/loginenter",function(req,res){
       if(bcrypt.compareSync(req.body.password,results[0].password)){
         connection.query("select * from messages WHERE emailsender = ?",[email],function(err,result,fields){
           if (err) throw err;
-          console.log(result);
-          console.log(result.length);
           result.push(req.body.email);
           result.push(req.body.password);
           result.push(result[0].sendername);
-          console.log(result[0].sendername);
           result.push('All');
-          console.log(result);
           res.render('outbox',{result:result});
         });
          
@@ -329,13 +300,14 @@ app.post("/loginenter",function(req,res){
 
 });
 
-app.use(multer({ dest:__dirname + '/public/uploads/'}).any('image'));
+ app.use(multer({ dest:__dirname + '/public/uploads/'}).any('image'));
 // compose button will be placed on outbox page and then to the compose page and then from the compose page will be send
 app.post('/send', (req, res) => {
-  console.log(req.body.message);
+  console.log(req.files);
+  if (req.files.length!=0){
   var dest_file = path.join(req.files[0].destination, req.files[0].originalname);
     var writerStream = fs.createWriteStream(dest_file);
-
+  }
     // var stream = readerStream.pipe(writerStream);
     // stream.on('finish', function(){
     //     fs.unlink(req.files[0].path);
@@ -392,10 +364,10 @@ app.post('/send', (req, res) => {
     auth: {
         user: results[0].email, // generated ethereal user
         pass: req.body.password  // generated ethereal password
+    },
+    tls:{
+      rejectUnauthorized:false
     }
-    // tls:{
-    //   rejectUnauthorized:false
-    // }
   });
   connect.query('SELECT * FROM client WHERE sender = ?',[results[0].email], function (error, results, fields) {
     if(req.files.length!=0)
@@ -498,13 +470,12 @@ var messages={
         connection.query("select * from messages WHERE emailsender = ?",[results[0].sender],function(err,result,fields){
           if (err) throw err;
           console.log('inside final ');
-          console.log(result);
-          console.log(result.length);
+          
           result.push(req.body.email);
           result.push(req.body.password);
           result.push(result[0].sendername);
           result.push('All');
-          console.log(result);
+          
           res.render('outbox',{result:result});
         });
   });
