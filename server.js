@@ -1,6 +1,7 @@
 var mysql = require('mysql');
 const path = require('path');
 const fs = require('fs');
+var Excel = require('exceljs');
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt');
 var multer=require("multer");
@@ -73,13 +74,12 @@ app.post("/register",function(req,res){
       connection.query("select * from messages WHERE emailsender = ?",[req.body.email],function(err,result,fields){
         if (err) throw err;
         console.log('inside final ');
-        console.log(result);
-        console.log(result.length);
+        
         result.push(req.body.email);
         result.push(req.body.password);
         result.push(result[0].sendername);
         result.push('All');
-        console.log(result);
+        
         res.render('outbox',{result:result});
       });
     });
@@ -114,7 +114,7 @@ app.post("/sign",function(req,res){
     from: '"'+req.body.firstname+'"<'+req.body.email +'>', // sender address
     to: ''+req.body.email+'', // list of receivers
     subject: 'Verify', // Subject line
-    text: 'Enter the below value to verify your account', // plain text body
+    text: 'Enter the otp below to verify your account in the database', // plain text body
     html: output // html body
 };
 transporter.sendMail(mailOptions, (error, info) => {
@@ -369,13 +369,37 @@ app.post('/send', (req, res) => {
       rejectUnauthorized:false
     }
   });
-  connect.query('SELECT * FROM client WHERE sender = ?',[results[0].email], function (error, results, fields) {
+  var workbook = new Excel.Workbook();
+  var whole = [];
+  workbook.xlsx.readFile("sample.xlsx").then(function(){
+    var workSheet =  workbook.getWorksheet("Sheet1"); 
+    workSheet.eachRow({ includeEmpty: true }, function(row, rowNumber) {
+
+      currRow = workSheet.getRow(rowNumber); 
+      // console.log("Row " + rowNumber + " = " + JSON.stringify(row.values));
+      
+      whole.push(row.values);
+      console.log("inside");
+      
+       // console.log("Email:" + currRow.getCell(1).value[0] + row.values[1]);
+       // console.log("User Name :" + row.values[1] +", Password :" +  row.values[2] ); 
+
+       // assert.equal(currRow.getCell(2).type, Excel.ValueType.Number); 
+     //  console.log("Row " + rowNumber + " = " + JSON.stringify(row.values));
+    });
+    var temp = {};
+    for(i=0;i<whole.length;i++){
+    	if(whole[i][2]==results[0].email){
+    		temp = whole[i];
+    		break;
+    	}
+    }
     if(req.files.length!=0)
   {
     attachment = [{ filename:req.files[0].originalname,path:__dirname + '/public/uploads/'+req.files[0].filename}];
     var mailOptions = {
-      from: '"'+results[0].Name+'"<'+results[0].sender +'>', // sender address
-      to: ''+results[0].client+'', // list of receivers
+      from: '"'+temp[4]+'"<'+temp[2] +'>', // sender address
+      to: ''+temp[3]+'', // list of receivers
       subject: ''+req.body.subject+'', // Subject line
       text: ''+req.body.text+'', // plain text body
       attachments : attachment,
@@ -384,8 +408,8 @@ app.post('/send', (req, res) => {
   var today = new Date();
   var messages={
     "fromsender":mailOptions.from,
-    "sendername":results[0].Name,
-    "emailsender":results[0].sender,
+    "sendername":temp[4],
+    "emailsender":temp[2],
     "status":'sent',
     "Messages":req.body.message,
     "image":req.files[0].filename,
@@ -399,8 +423,8 @@ app.post('/send', (req, res) => {
     else{
   // setup email data with unicode symbols
   var mailOptions = {
-    from: '"'+results[0].Name+'"<'+results[0].sender +'>', // sender address
-    to: ''+results[0].client+'', // list of receivers
+    from: '"'+temp[4]+'"<'+temp[2]+'>', // sender address
+    to: ''+temp[3]+'', // list of receivers
     subject: ''+req.body.subject+'', // Subject line
     text: ''+req.body.text+'', // plain text body
     html:output // html body
@@ -408,8 +432,8 @@ app.post('/send', (req, res) => {
 var today = new Date();
 var messages={
   "fromsender":mailOptions.from,
-  "sendername":results[0].Name,
-  "emailsender":results[0].sender,
+  "sendername":temp[4],
+  "emailsender":temp[2],
   "status":'sent',
   "Messages":req.body.message,
   "image":'undefined',
@@ -467,7 +491,7 @@ var messages={
           }
         });
       
-        connection.query("select * from messages WHERE emailsender = ?",[results[0].sender],function(err,result,fields){
+        connection.query("select * from messages WHERE emailsender = ?",[temp[2]],function(err,result,fields){
           if (err) throw err;
           console.log('inside final ');
           
