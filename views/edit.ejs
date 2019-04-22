@@ -15,54 +15,59 @@
 </head>
 <body>    
     
-    <div id="myModal" class="modal">
-      <!-- Modal content -->
-      <div class="modal-content">
-        <span class="close">&times;</span>
-        <div class="table-responsive">
-          <form method="POST" action="/send" enctype="multipart/form-data">
-            <table class="table table-bordered">
-              <tbody>
+  <div id="myModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <div class="table-responsive">
+        <form method="POST" action="/send" enctype="multipart/form-data">
+          <table class="table table-bordered" id="dynamic">
+            <tbody>
+              <tr>
+                <input type="hidden"  name="password" value=<%=result[result.length-3] %>>
+                <input type="hidden" name="email" value=<%=result[result.length-4] %>>
+                <textarea style="display:none" rows="20" cols="100" name="sender"><%=result[result.length-2]%></textarea>
+                <td>Subject:<input type='text'id="sub" name="subject"></td>
+              </tr>
+              <tr>
                 <tr>
-                  <input type="hidden"  name="password" value=<%=result[result.length-3] %>>
-                  <input type="hidden" name="email" value=<%=result[result.length-4] %>>
-                  <textarea style="display:none"rows="4" cols="50" name="sender"><%=result[result.length-2]%></textarea>
-                  <td>Subject:<input type='text'id="sub" name="subject"></td>
+                  <td>Text:<input name="text" id="text"></td>
                 </tr>
                 <tr>
-                  <tr>
-                    <td>Text:<input name="text" id="text"></td>
-                  </tr>
-                  <tr>
-                  <td>
-                  
-                  <textarea rows="4" cols="50" name="message" id="message">Enter your message:</textarea></td>
+                  <td>Purpose: <input type="text" name="purpose"  onchange="myFunction(this.value)"></td>
                 </tr>
-                <tr><input type="text"  id="image" placeholder="Add image if necessary" name="image"></tr>
-              </tbody>
-               
+                <tr>
+                <td>
+                
+                <textarea rows="4" cols="50" name="message" id="message">Enter your message:</textarea></td>
+              </tr>
+              <tr><td><input type="file" class="form-control" id="image" placeholder="Choose Appropriate file(not compulsory)" name="image"><td></tr>
+            </tbody>
+             
 
-            </table>
-          <button type="button" onclick="this.form.submit()">Send</button>
+          </table>
+        <button type="button" onclick="this.form.submit()" >Send</button>
+        
+
+        </form>
+        <form method="POST" action="/senddraft" >
+          
+          <input type="hidden" name="password" value=<%=result[result.length-3] %>>
+          <input type="hidden"  name="email" value=<%=result[result.length-4] %>>
+          <textarea style="display:none" rows="4" cols="50" name="fromsender" ><%=result[0].fromsender%></textarea>
+          <input type="hidden" name="toreceiver" value=<%=result[0].toreceiver %>>
+          <textarea style="display:none"rows="20" cols="100" name="sender" ><%=result[result.length-2]%></textarea>
+          
+          <input type="hidden" name="subject" id="sub1">
+          <input type="hidden" name="text" id="text1">
+          <textarea style="display:none" rows="4" cols="50" name="message" id="message1">Enter your message:</textarea>
+          <button style="display:none" id="click"  ></button>
         </form>
 
-         
-          <form method="POST" action="/senddraft">
-            <button style="display: none" id="click" onclick="this.form.submit()"></button>
-            <input type="hidden"  name="password" value=<%=result[result.length-3] %>>
-            <input type="hidden" name="email" value=<%=result[result.length-4] %>>
-            <textarea style="display:none"rows="4" cols="50" name="fromsender" ><%=result[0].fromsender%></textarea>
-            <input type="hidden" name="toreceiver" value=<%=result[0].toreceiver %>>
-            <textarea style="display:none"rows="4" cols="50" name="sender" ><%=result[result.length-2]%></textarea>
-            <input type="hidden"  id="image1" placeholder="Add image if necessary" name="image">
-            <input type="hidden" name="subject" id="sub1">
-            <input type="hidden" name="text" id="text1">
-            <textarea style="display:none" type="hidden" rows="4" cols="50" name="message" id="message1">Enter your message:</textarea>
-          </form>
-
-        </div>
       </div>
     </div>
+  </div>
+ 
    
       
         
@@ -159,53 +164,60 @@
                 </div>
             </div>
     
-    <script>
-      var modal = document.getElementById('myModal');
-      
-      
-// Get the button that opens the modal
-  var btn = document.getElementById("myBtn");
-  var button = document.getElementById("myBtn1");
-  
-
-// Get the <span> element that closes the modal
-  var span = document.getElementsByClassName("close")[0];
- 
-
-// When the user clicks the button, open the modal 
-btn.onclick = function() {
-  console.log("Clicked");
-  modal.style.display = "block";
-}
-
-
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-  modal.style.display = "none";
-}
-
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-    var p = document.getElementById("sub").value;
-    document.getElementById("sub1").value=p;
-    var q = document.getElementById("text").value;
-    document.getElementById("text1").value=q;
-    var r = document.getElementById("message").value;
-    document.getElementById("message1").value=r;
-    var s = document.getElementById("image").value;
-    document.getElementById("image1").value=s;
-    document.getElementById("click").click();
-  }
-  
-  
-}
-
-    
-    </script>
-   
+            <script>
+              function myFunction(val) {
+          if(val=="order"){
+              $('#dynamic').append('<tr><td>Orderno:<input type="text" name="orderno" required></tr><tr><td>Orderdate in (dd/mm/yyyy):<input type="text" name="orderdate" required></td></tr></td></tr><tr><td>Orderprice:<input type="text" name="orderprice" required></td></tr><tr><td>Quantity:<input type="text" name="quantity" required></td></tr><tr><td>Price:<input type="text" name="price" required></td></tr><tr><td>GST:<input type="text" name="gst" required></td></tr>');
+          }
+        }
+              
+        var modal = document.getElementById("myModal");
+              
+              
+        // Get the button that opens the modal
+          var btn = document.getElementById("myBtn");
+          var button = document.getElementById("myBtn1");
+          
+        
+        // Get the <span> element that closes the modal
+          var span = document.getElementsByClassName("close")[0];
+          
+        
+        // When the user clicks the button, open the modal 
+        btn.onclick = function() {
+          console.log("Clicked");
+          modal.style.display = "block";
+        }
+        function show(id){
+          console.log("inside");
+          document.getElementById(id).click();
+        }
+        
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+          modal.style.display = "none";
+        }
+        
+        
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+          if (event.target == modal) {
+            console.log("Inside modal");
+            // modal.style.display = "none";
+            var p = document.getElementById("sub").value;
+            document.getElementById("sub1").value=p;
+            var q = document.getElementById("text").value;
+            document.getElementById("text1").value=q;
+            var r = document.getElementById("message").value;
+            document.getElementById("message1").value=r;
+            
+            document.getElementById("click").click();
+          }
+          }
+        
+            
+            </script>
+           
     
     </body>
 </html>

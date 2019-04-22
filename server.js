@@ -12,12 +12,7 @@ var connection = mysql.createConnection({
     database:'mailtest'
 });
 
-var connect = mysql.createConnection({
-  host:'localhost',
-  user:'root',
-  password:'',
-  database:'company'
-});
+
 
 connection.connect(function(err){
     if(!err){
@@ -28,14 +23,7 @@ connection.connect(function(err){
     }
 });
 
-connect.connect(function(err){
-  if(!err){
-      console.log("Database is connected ... nn");
-  }
-  else{
-      console.log("Error connecting database .... nn");
-  }
-});
+
 
 var express = require('express');
 var app = express();
@@ -158,6 +146,7 @@ app.post("/sent",function(req,res){
   });
 });
 app.post("/senddraft",function(req,res){
+  console.log(req.body);
   console.log(req.files);
   var today = new Date();
   console.log(req.body.image);
@@ -173,7 +162,14 @@ app.post("/senddraft",function(req,res){
     "date":today,
     "subject":req.body.subject,
     "text":req.body.text,
-    "Messages":req.body.message
+    "Messages":req.body.message,
+    "orderno":undefined,
+    "orderdate":undefined,
+    "orderprice":undefined,
+    "quantity":undefined,
+    "price":undefined,
+    "gst":undefined,
+    "total":undefined
   };
   
   if (req.body.subject!=''){
@@ -201,13 +197,14 @@ app.post("/senddraft",function(req,res){
 });
 
 app.post("/route",function(req,res){
-  console.log(req.body);
+  
   connection.query("select * from messages WHERE sendername=? and Messages = ? and status=?",[req.body.sender,req.body.message,req.body.status],function(err,result,fields){
     if (err) throw err;
     result.push(req.body.email);
     result.push(req.body.password);
     result.push(result[0].sendername);
     result.push('All');
+    console.log(result);
     res.render('home',{result:result});
   });
 });
@@ -326,20 +323,213 @@ app.post('/send', (req, res) => {
     
       else{
         console.log(email);
-        if(req.body.image==undefined)
+        if(req.body.purpose=="order")
         {
-        var output = `
-    <p>You have a new contact request</p>
-    <h3>Contact Details</h3>
-    <ul>  
-      <li>Name: XYZ</li>
-      <li>Company:Pehchan</li>
-      <li>Email:pehchan@gmail.com</li>
-      <li>Phone:0222892939/li>
-    </ul>
-    <h3>Message</h3>
-    <pre>${req.body.message}</pre>`;
-        }
+          var qty = req.body.quantity;
+          var price = req.body.price;
+          var gst = req.body.gst;
+          var total = (price*qty)+(price*qty)*(gst/100);
+              var output = `
+              <!doctype html>
+          <html>
+          <head>
+             <meta charset="utf-8">
+             <title></title>
+          
+             <style>
+             .invoice-box {
+                 max-width: 800px;
+                 margin: auto;
+                 padding: 30px;
+                 border: 1px solid #eee;
+                 box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+                 font-size: 16px;
+                 line-height: 24px;
+                 font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+                 color: #555;
+             }
+          
+             .invoice-box table {
+                 width: 100%;
+                 line-height: inherit;
+                 text-align: left;
+             }
+          
+             .invoice-box table td {
+                 padding: 5px;
+                 vertical-align: top;
+             }
+          
+             .invoice-box table tr td:nth-child(2) {
+                 text-align: right;
+             }
+          
+             .invoice-box table tr.top table td {
+                 padding-bottom: 20px;
+             }
+          
+             .invoice-box table tr.top table td.title {
+                 font-size: 45px;
+                 line-height: 45px;
+                 color: #333;
+             }
+          
+             .invoice-box table tr.information table td {
+                 padding-bottom: 40px;
+             }
+          
+             .invoice-box table tr.heading td {
+                 background: #eee;
+                 border-bottom: 1px solid #ddd;
+                 font-weight: bold;
+             }
+          
+             .invoice-box table tr.details td {
+                 padding-bottom: 20px;
+             }
+          
+             .invoice-box table tr.item td{
+                 border-bottom: 1px solid #eee;
+             }
+          
+             .invoice-box table tr.item.last td {
+                 border-bottom: none;
+             }
+          
+             .invoice-box table tr.total td:nth-child(2) {
+                 border-top: 2px solid #eee;
+                 font-weight: bold;
+             }
+          
+             @media only screen and (max-width: 600px) {
+                 .invoice-box table tr.top table td {
+                     width: 100%;
+                     display: block;
+                     text-align: center;
+                 }
+          
+                 .invoice-box table tr.information table td {
+                     width: 100%;
+                     display: block;
+                     text-align: center;
+                 }
+             }
+          
+             /** RTL **/
+             .rtl {
+                 direction: rtl;
+                 font-family: Tahoma, 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+             }
+          
+             .rtl table {
+                 text-align: right;
+             }
+          
+             .rtl table tr td:nth-child(2) {
+                 text-align: left;
+             }
+             </style>
+          </head>
+          
+          <body>
+             <div class="invoice-box">
+                 <table cellpadding="0" cellspacing="0">
+                     <tr class="top">
+                         <td colspan="2">
+                             <table>
+                                 <tr>
+                                     <td class="title">
+                                         <img src="http://www.mailer.mypehchan.com/logo1.png" style="width:100%; max-width:300px;">
+                                     </td>
+          
+                                     <td>
+                                         Order #: ${req.body.orderno} <br>
+                                         Order Date: ${req.body.orderdate}<br>
+          
+                                     </td>
+                                 </tr>
+                             </table>
+                         </td>
+                     </tr>
+          
+                     <tr class="information">
+                         <td colspan="2">
+                             <table>
+                                 <tr>
+                                     <td>
+                                         Pehchan,Gala no.4<br>
+                                         St. Martin Road, Off Turner Road,<br>
+                                         Bandra,	Mumbai - 400 050
+                                     </td>
+          
+                                     <td>
+                         XYZ company<br>
+                         ${results[0].firstname}<br>
+                         ${results[0].email}<br>
+                         ${results[0].phoneno}
+                                     </td>
+                                 </tr>
+                             </table>
+                         </td>
+                     </tr>
+                   </table>
+          <table>
+                     <tr class="heading">
+                         <td>
+                             Product Name
+                         </td>
+          
+                         <td>
+                             Unit Price
+                         </td>
+                         <td>
+                             Quantity
+                         </td>
+                         <td>
+                             GST %
+                         </td>
+                         <td>
+                             Total Amount
+                         </td>
+          
+                     </tr>
+          
+                     <tr class="details">
+                 <td>
+                 ${req.body.message}
+               </td>
+          
+               <td>
+               ${req.body.price}
+               </td>
+               <td>
+               ${req.body.quantity}
+               </td>
+               <td>
+               ${req.body.gst}
+               </td>
+               <td>
+               ${(req.body.price*req.body.quantity)+(req.body.price*req.body.quantity)*(req.body.gst/100)}
+               </td>
+                     </tr>
+          </table>
+          
+          <table>
+            <tr>
+              <th width='1%'>follow us :</th>
+              <th width='15%'>                        <img src="http://www.mailer.mypehchan.com/facebook.png" data-default="placeholder" data-max-width="30" width='30' height='30' alt='facebook' style='margin-right:40x;' data-customIcon="true" >
+                <img src="http://www.mailer.mypehchan.com/twitter.png" data-default="placeholder" data-max-width="30" width='30' height='30' alt='twitter' style='margin-right:40x;'>
+                <img src="http://www.mailer.mypehchan.com/pinterest.png" width="30" height="30" data-max-width="30" alt='Pinterest' style='margin-right:40x;' data-customIcon="true" />
+          
+           </th>
+            </tr>
+          </table>
+          
+             </div>
+          </body>
+          </html>
+              `;
+            }          
         else{
           var output = `
     <p>You have a new contact request</p>
@@ -406,6 +596,7 @@ app.post('/send', (req, res) => {
       html:output // html body
   };
   var today = new Date();
+  if(req.body.purpose=="order"){
   var messages={
     "fromsender":mailOptions.from,
     "sendername":temp[4],
@@ -417,8 +608,38 @@ app.post('/send', (req, res) => {
     "toreceiver":mailOptions.to,
     "subject":mailOptions.subject,
     "text":mailOptions.text,
-    "date":today
+    "date":today,
+    "orderno":req.body.orderno,
+    "orderdate":req.body.orderdate,
+    "orderprice":req.body.orderprice,
+    "quantity":req.body.quantity,
+    "price":req.body.price,
+    "gst":req.body.gst,
+    "total":(req.body.price*req.body.quantity)+(req.body.price*req.body.quantity)*(req.body.gst/100)
   }
+}
+else{
+  var messages={
+    "fromsender":mailOptions.from,
+    "sendername":temp[4],
+    "emailsender":temp[2],
+    "status":'sent',
+    "Messages":req.body.message,
+    "image":req.files[0].filename,
+    "imagename":req.files[0].originalname,
+    "toreceiver":mailOptions.to,
+    "subject":mailOptions.subject,
+    "text":mailOptions.text,
+    "date":today,
+    "orderno":undefined,
+    "orderdate":undefined,
+    "orderprice":undefined,
+    "quantity":undefined,
+    "price":undefined,
+    "gst":undefined,
+    "total":undefined
+  }
+}
   }
     else{
   // setup email data with unicode symbols
@@ -430,6 +651,7 @@ app.post('/send', (req, res) => {
     html:output // html body
 };
 var today = new Date();
+if(req.body.purpose=="order"){
 var messages={
   "fromsender":mailOptions.from,
   "sendername":temp[4],
@@ -441,7 +663,36 @@ var messages={
   "toreceiver":mailOptions.to,
   "subject":mailOptions.subject,
   "text":mailOptions.text,
-  "date":today
+  "date":today,
+  "orderno":req.body.orderno,
+  "orderdate":req.body.orderdate,
+  "orderprice":req.body.orderprice,
+  "quantity":req.body.quantity,
+  "price":req.body.price,
+  "gst":req.body.gst,
+  "total":(req.body.price*req.body.quantity)+(req.body.price*req.body.quantity)*(req.body.gst/100)
+
+}}else{
+  var messages={
+    "fromsender":mailOptions.from,
+    "sendername":temp[4],
+    "emailsender":temp[2],
+    "status":'sent',
+    "Messages":req.body.message,
+    "image":'undefined',
+    "imagename":'undefined',
+    "toreceiver":mailOptions.to,
+    "subject":mailOptions.subject,
+    "text":mailOptions.text,
+    "date":today,
+    "orderno":undefined,
+    "orderdate":undefined,
+    "orderprice":undefined,
+    "quantity":undefined,
+    "price":undefined,
+    "gst":undefined,
+    "total":undefined
+  }
 }}
  
   var messages1={
@@ -454,7 +705,14 @@ var messages={
     "toreceiver":mailOptions.to,
     "subject":mailOptions.subject,
     "text":mailOptions.text,
-    "date":today
+    "date":today,
+    "orderno":undefined,
+    "orderdate":undefined,
+    "orderprice":undefined,
+    "quantity":undefined,
+    "price":undefined,
+    "gst":undefined,
+    "total":undefined
   }
  
 

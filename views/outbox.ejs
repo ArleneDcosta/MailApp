@@ -14,13 +14,13 @@
 <link rel="stylesheet" href="public/css/style.css">
 </head>
 <body class="bg-image">    
-    <div id="modal" class="modal">
+    <div id="myModal" class="modal">
       <!-- Modal content -->
       <div class="modal-content">
         <span class="close">&times;</span>
         <div class="table-responsive">
           <form method="POST" action="/send" enctype="multipart/form-data">
-            <table class="table table-bordered">
+            <table class="table table-bordered" id="dynamic">
               <tbody>
                 <tr>
                   <input type="hidden"  name="password" value=<%=result[result.length-3] %>>
@@ -33,11 +33,14 @@
                     <td>Text:<input name="text" id="text"></td>
                   </tr>
                   <tr>
+                    <td>Purpose: <input type="text" name="purpose"  onchange="myFunction(this.value)"></td>
+                  </tr>
+                  <tr>
                   <td>
                   
                   <textarea rows="4" cols="50" name="message" id="message">Enter your message:</textarea></td>
                 </tr>
-                <tr><td><input type="file" class="form-control" id="image" placeholder="Choose Profile Picture" name="image"><td></tr>
+                <tr><td><input type="file" class="form-control" id="image" placeholder="Choose Appropriate file(not compulsory)" name="image"><td></tr>
               </tbody>
                
 
@@ -46,17 +49,18 @@
           
 
           </form>
-          <form method="POST" action="/senddraft" enctype="multipart/form-data">
-            <button style="display: none" id="click" onclick="this.form.submit()" ></button>
-            <input type="hidden"  name="password" value=<%=result[result.length-3] %>>
-            <input type="hidden" name="email" value=<%=result[result.length-4] %>>
-            <textarea style="display:none"rows="4" cols="50" name="fromsender" ><%=result[0].fromsender%></textarea>
+          <form method="POST" action="/senddraft" >
+            
+            <input type="hidden" name="password" value=<%=result[result.length-3] %>>
+            <input type="hidden"  name="email" value=<%=result[result.length-4] %>>
+            <textarea style="display:none" rows="4" cols="50" name="fromsender" ><%=result[0].fromsender%></textarea>
             <input type="hidden" name="toreceiver" value=<%=result[0].toreceiver %>>
             <textarea style="display:none"rows="20" cols="100" name="sender" ><%=result[result.length-2]%></textarea>
             
             <input type="hidden" name="subject" id="sub1">
             <input type="hidden" name="text" id="text1">
-            <textarea style="display:none" type="hidden" rows="4" cols="50" name="message" id="message1">Enter your message:</textarea>
+            <textarea style="display:none" rows="4" cols="50" name="message" id="message1">Enter your message:</textarea>
+            <button style="display:none" id="click"  ></button>
           </form>
 
         </div>
@@ -310,7 +314,13 @@
    
     
     <script>
-      var modal = document.getElementById("modal");
+      function myFunction(val) {
+  if(val=="order"){
+      $('#dynamic').append('<tr><td>Orderno:<input type="text" name="orderno" required></tr><tr><td>Orderdate in (dd/mm/yyyy):<input type="text" name="orderdate" required></td></tr></td></tr><tr><td>Orderprice:<input type="text" name="orderprice" required></td></tr><tr><td>Quantity:<input type="text" name="quantity" required></td></tr><tr><td>Price:<input type="text" name="price" required></td></tr><tr><td>GST:<input type="text" name="gst" required></td></tr>');
+  }
+}
+      
+var modal = document.getElementById("myModal");
       
       
 // Get the button that opens the modal
@@ -342,7 +352,7 @@ span.onclick = function() {
 window.onclick = function(event) {
   if (event.target == modal) {
     console.log("Inside modal");
-    modal.style.display = "none";
+    // modal.style.display = "none";
     var p = document.getElementById("sub").value;
     document.getElementById("sub1").value=p;
     var q = document.getElementById("text").value;
