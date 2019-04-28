@@ -314,6 +314,66 @@
                                <%=(result[0].price*result[0].quantity)+(result[0].price*result[0].quantity)*(result[0].gst/100)%>
                                </td>
                                      </tr>
+                                     <% if (result[0].price1!=null){ %>
+                                      <tr class="details">
+                                        <td>
+                                         
+                                      </td>
+                                 
+                                      <td>
+                                       <%= result[0].price1%>
+                                      </td>
+                                      <td>
+                                       <%= result[0].quantity1%>
+                                      </td>
+                                      <td>
+                                       <%= result[0].gst1%>
+                                      </td>
+                                      <td>
+                                      <%=(result[0].price1*result[0].quantity1)+(result[0].price1*result[0].quantity1)*(result[0].gst1/100)%>
+                                      </td>
+                                            </tr>
+                                      <% } %>
+                                      <% if (result[0].price2!=null){ %>
+                                        <tr class="details">
+                                          <td>
+                                           
+                                        </td>
+                                   
+                                        <td>
+                                         <%= result[0].price2%>
+                                        </td>
+                                        <td>
+                                         <%= result[0].quantity2%>
+                                        </td>
+                                        <td>
+                                         <%= result[0].gst2%>
+                                        </td>
+                                        <td>
+                                        <%=(result[0].price2*result[0].quantity2)+(result[0].price2*result[0].quantity2)*(result[0].gst2/100)%>
+                                        </td>
+                                              </tr>
+                                        <% } %>
+                                        <% if (result[0].price3!=null){ %>
+                                          <tr class="details">
+                                            <td>
+                                             
+                                          </td>
+                                     
+                                          <td>
+                                           <%= result[0].price3%>
+                                          </td>
+                                          <td>
+                                           <%= result[0].quantity3%>
+                                          </td>
+                                          <td>
+                                           <%= result[0].gst3%>
+                                          </td>
+                                          <td>
+                                          <%=(result[0].price3*result[0].quantity3)+(result[0].price3*result[0].quantity3)*(result[0].gst3/100)%>
+                                          </td>
+                                                </tr>
+                                          <% } %>
                           </table>
                           
                           <table>

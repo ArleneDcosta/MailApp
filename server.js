@@ -169,7 +169,19 @@ app.post("/senddraft",function(req,res){
     "quantity":undefined,
     "price":undefined,
     "gst":undefined,
-    "total":undefined
+    "total":undefined,
+    "quantity1":undefined,
+    "price1":undefined,
+    "gst1":undefined,
+    "total1":undefined,
+    "quantity2":undefined,
+    "price2":undefined,
+    "gst2":undefined,
+    "total2":undefined,
+    "quantity3":undefined,
+    "price3":undefined,
+    "gst3":undefined,
+    "total3":undefined
   };
   
   if (req.body.subject!=''){
@@ -670,7 +682,19 @@ app.post('/send', (req, res) => {
     "quantity":req.body.quantity,
     "price":req.body.price,
     "gst":req.body.gst,
-    "total":(req.body.price*req.body.quantity)+(req.body.price*req.body.quantity)*(req.body.gst/100)
+    "total":(req.body.price*req.body.quantity)+(req.body.price*req.body.quantity)*(req.body.gst/100),
+    "quantity1":req.body.quantity1,
+    "price1":req.body.price1,
+    "gst1":req.body.gst1,
+    
+    "quantity2":req.body.quantity2,
+    "price2":req.body.price2,
+    "gst2":req.body.gst2,
+    
+    "quantity3":req.body.quantity3,
+    "price3":req.body.price3,
+    "gst3":req.body.gst3,
+    
   }
 }
 else{
@@ -692,7 +716,19 @@ else{
     "quantity":undefined,
     "price":undefined,
     "gst":undefined,
-    "total":undefined
+    "total":undefined,
+    "quantity1":undefined,
+    "price1":undefined,
+    "gst1":undefined,
+    "total1":undefined,
+    "quantity2":undefined,
+    "price2":undefined,
+    "gst2":undefined,
+    "total2":undefined,
+    "quantity3":undefined,
+    "price3":undefined,
+    "gst3":undefined,
+    "total3":undefined
   }
 }
   }
@@ -725,7 +761,19 @@ var messages={
   "quantity":req.body.quantity,
   "price":req.body.price,
   "gst":req.body.gst,
-  "total":(req.body.price*req.body.quantity)+(req.body.price*req.body.quantity)*(req.body.gst/100)
+  "total":(req.body.price*req.body.quantity)+(req.body.price*req.body.quantity)*(req.body.gst/100),
+  "quantity1":req.body.quantity1,
+  "price1":req.body.price1,
+  "gst1":req.body.gst1,
+  
+  "quantity2":req.body.quantity2,
+  "price2":req.body.price2,
+  "gst2":req.body.gst2,
+  
+  "quantity3":req.body.quantity3,
+  "price3":req.body.price3,
+  "gst3":req.body.gst3
+  
 
 }}else{
   var messages={
@@ -746,7 +794,19 @@ var messages={
     "quantity":undefined,
     "price":undefined,
     "gst":undefined,
-    "total":undefined
+    "total":undefined,
+    "quantity1":undefined,
+    "price1":undefined,
+    "gst1":undefined,
+    "total1":undefined,
+    "quantity2":undefined,
+    "price2":undefined,
+    "gst2":undefined,
+    "total2":undefined,
+    "quantity3":undefined,
+    "price3":undefined,
+    "gst3":undefined,
+    "total3":undefined
   }
 }}
  
