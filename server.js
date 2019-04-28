@@ -329,6 +329,57 @@ app.post('/send', (req, res) => {
           var price = req.body.price;
           var gst = req.body.gst;
           var total = (price*qty)+(price*qty)*(gst/100);
+          if(req.body.price1!=null ||req.body.price1!=undefined ){
+            var t=`<tr><td></td><td>
+             ${req.body.price1}
+             </td>
+             <td>
+             ${req.body.quantity1}
+             </td>
+             <td>
+             ${req.body.gst1}
+             </td>
+             <td>
+             ${(req.body.price1*req.body.quantity1)+(req.body.price1*req.body.quantity1)*(req.body.gst1/100)}
+             </td><tr>`;
+           }
+           else{
+             var t=``;
+           }
+           if(req.body.price2!=null ||req.body.price2!=undefined ){
+            var u=`<tr><td></td><td>
+             ${req.body.price2}
+             </td>
+             <td>
+             ${req.body.quantity2}
+             </td>
+             <td>
+             ${req.body.gst2}
+             </td>
+             <td>
+             ${(req.body.price2*req.body.quantity2)+(req.body.price2*req.body.quantity2)*(req.body.gst2/100)}
+             </td><tr>`;
+           }
+           else{
+             var u=``;
+           }
+           if(req.body.price3!=null ||req.body.price3!=undefined ){
+            var v=`<tr><td></td><td>
+             ${req.body.price3}
+             </td>
+             <td>
+             ${req.body.quantity3}
+             </td>
+             <td>
+             ${req.body.gst3}
+             </td>
+             <td>
+             ${(req.body.price3*req.body.quantity3)+(req.body.price3*req.body.quantity3)*(req.body.gst3/100)}
+             </td><tr>`;
+           }
+           else{
+             var v=``;
+           }
               var output = `
               <!doctype html>
           <html>
@@ -510,8 +561,12 @@ app.post('/send', (req, res) => {
                </td>
                <td>
                ${(req.body.price*req.body.quantity)+(req.body.price*req.body.quantity)*(req.body.gst/100)}
-               </td>
-                     </tr>
+               </td>`+t+u+v
+               
+              
+               
+               
+                    +`</tr>
           </table>
           
           <table>

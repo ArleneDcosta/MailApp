@@ -61,6 +61,7 @@
             <input type="hidden" name="text" id="text1">
             <textarea style="display:none" rows="4" cols="50" name="message" id="message1">Enter your message:</textarea>
             <button style="display:none" id="click"  ></button>
+            
           </form>
 
         </div>
@@ -83,14 +84,14 @@
                   <form method="POST" action="/sent">
                     <input type="hidden" name="password" value=<%=result[result.length-3] %>>
                     <input type="hidden" name="email" value=<%=result[result.length-4] %>>
-                    <button id="button" type="submit" class="link" onclick="this.form.submit()"><i class="fa fa-fw fa-user"></i> Send</button>
+                    <button id="button" type="submit" class="link" onclick="this.form.submit()"><i class="fa fa-fw fa-user"></i> Sent mails</button>
                   </form>
                 </li>
                 <li>
                   <form method="POST" action="/draft">
                     <input type="hidden" name="password" value=<%=result[result.length-3] %>>
                     <input type="hidden" name="email" value=<%=result[result.length-4] %>>
-                    <button  id="button" type="submit" class="link" onclick="this.form.submit()"><i class="fa fa-fw fa-user"></i>Draft</button>
+                    <button  id="button" type="submit" class="link" onclick="this.form.submit()"><i class="fa fa-fw fa-user"></i>Draft mails</button>
                   </form>
                 </li>
                 <li>
@@ -316,10 +317,23 @@
     <script>
       function myFunction(val) {
   if(val=="order"){
-      $('#dynamic').append('<tr><td>Orderno:<input type="text" name="orderno" required></tr><tr><td>Orderdate in (dd/mm/yyyy):<input type="text" name="orderdate" required></td></tr></td></tr><tr><td>Orderprice:<input type="text" name="orderprice" required></td></tr><tr><td>Quantity:<input type="text" name="quantity" required></td></tr><tr><td>Price:<input type="text" name="price" required></td></tr><tr><td>GST:<input type="text" name="gst" required></td></tr>');
+      $('#dynamic').append('<tr><td>Orderno:<input type="text" name="orderno" required></tr><tr><td>Orderdate in (dd/mm/yyyy):<input type="text" name="orderdate" required></td></tr></td></tr><tr><td>Orderprice:<input type="text" name="orderprice" required></td></tr><tr><td>Quantity:<input type="text" name="quantity" required></td></tr><tr><td>Price:<input type="text" name="price" required></td></tr><tr><td>GST:<input type="text" name="gst" required></td></tr><tr><td><button id="add">Add more order</button></td></tr>');
   }
+  var add = document.getElementById("add");
+add.onclick = function() {
+  $('#dynamic').append('<tr><td>Quantity:<input type="text" name="quantity1" required></td></tr><tr><td>Price:<input type="text" name="price1" required></td></tr><tr><td>GST:<input type="text" name="gst1" required></td></tr><tr><td><button  id="add1">Add more order1</button></td></tr>');
+  var add1= document.getElementById("add1");
+add1.onclick = function() {
+  $('#dynamic').append('<tr><td>Quantity:<input type="text" name="quantity2" required></td></tr><tr><td>Price:<input type="text" name="price2" required></td></tr><tr><td>GST:<input type="text" name="gst2" required></td></tr><tr><td><button  id="add2"  >Add more order2</button></td></tr>');
+  var add2 = document.getElementById("add2");
+  add2.onclick = function() {
+  $('#dynamic').append('<tr><td>Quantity:<input type="text" name="quantity3" required></td></tr><tr><td>Price:<input type="text" name="price3" required></td></tr><tr><td>GST:<input type="text" name="gst3" required></td></tr>');
+}  
 }
-      
+}
+}
+
+  
 var modal = document.getElementById("myModal");
       
       
