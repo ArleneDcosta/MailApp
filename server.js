@@ -126,6 +126,9 @@ app.get("/login",function(req,res){
 app.get("/signup",function(req,res){
   res.render('signup');
 });
+app.get("/logout",function(req,res){
+  res.render('login');
+});
 app.post("/sent",function(req,res){
   var email = req.body.email;
   connection.query("select * from messages where status ='sent' and emailsender = ? ",[email],function(error,result,fields){
