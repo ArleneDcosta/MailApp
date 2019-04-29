@@ -342,7 +342,7 @@ app.post('/send', (req, res) => {
           var gst = req.body.gst;
           var total = (price*qty)+(price*qty)*(gst/100);
           if(req.body.price1!=null ||req.body.price1!=undefined ){
-            var t=`<tr><td></td><td>
+            var t=`<tr><td>${req.body.message1}</td><td>
              ${req.body.price1}
              </td>
              <td>
@@ -359,7 +359,7 @@ app.post('/send', (req, res) => {
              var t=``;
            }
            if(req.body.price2!=null ||req.body.price2!=undefined ){
-            var u=`<tr><td></td><td>
+            var u=`<tr><td>${req.body.message2}</td><td>
              ${req.body.price2}
              </td>
              <td>
@@ -376,7 +376,7 @@ app.post('/send', (req, res) => {
              var u=``;
            }
            if(req.body.price3!=null ||req.body.price3!=undefined ){
-            var v=`<tr><td></td><td>
+            var v=`<tr><td>${req.body.message3}</td><td>
              ${req.body.price3}
              </td>
              <td>
@@ -627,7 +627,7 @@ app.post('/send', (req, res) => {
     }
   });
   var workbook = new Excel.Workbook();
-  var whole = [];
+  var arr = [];
   workbook.xlsx.readFile("sample.xlsx").then(function(){
     var workSheet =  workbook.getWorksheet("Sheet1"); 
     workSheet.eachRow({ includeEmpty: true }, function(row, rowNumber) {
@@ -635,7 +635,7 @@ app.post('/send', (req, res) => {
       currRow = workSheet.getRow(rowNumber); 
       // console.log("Row " + rowNumber + " = " + JSON.stringify(row.values));
       
-      whole.push(row.values);
+      arr.push(row.values[1]);
       console.log("inside");
       
        // console.log("Email:" + currRow.getCell(1).value[0] + row.values[1]);
@@ -644,19 +644,20 @@ app.post('/send', (req, res) => {
        // assert.equal(currRow.getCell(2).type, Excel.ValueType.Number); 
      //  console.log("Row " + rowNumber + " = " + JSON.stringify(row.values));
     });
-    var temp = {};
-    for(i=0;i<whole.length;i++){
-    	if(whole[i][2]==results[0].email){
-    		temp = whole[i];
-    		break;
-    	}
-    }
+    var receivers = arr.join();
+    // var temp = {};
+    // for(i=0;i<whole.length;i++){
+    // 	if(whole[i][2]==results[0].email){
+    // 		temp = whole[i];
+    // 		break;
+    // 	}
+    // }
     if(req.files.length!=0)
   {
     attachment = [{ filename:req.files[0].originalname,path:__dirname + '/public/uploads/'+req.files[0].filename}];
     var mailOptions = {
-      from: '"'+temp[4]+'"<'+temp[2] +'>', // sender address
-      to: ''+temp[3]+'', // list of receivers
+      from: '"'+results[0].firstname+''+results[0].lastname+'"<'+results[0].email+'>', // sender address
+      to: ''+receivers+'', // list of receivers
       subject: ''+req.body.subject+'', // Subject line
       text: ''+req.body.text+'', // plain text body
       attachments : attachment,
@@ -666,8 +667,8 @@ app.post('/send', (req, res) => {
   if(req.body.purpose=="order"){
   var messages={
     "fromsender":mailOptions.from,
-    "sendername":temp[4],
-    "emailsender":temp[2],
+    "sendername":results[0].firstname+''+results[0].lastname,
+    "emailsender":results[0].email,
     "status":'sent',
     "Messages":req.body.message,
     "image":req.files[0].filename,
@@ -682,15 +683,15 @@ app.post('/send', (req, res) => {
     "quantity":req.body.quantity,
     "price":req.body.price,
     "gst":req.body.gst,
-    "total":(req.body.price*req.body.quantity)+(req.body.price*req.body.quantity)*(req.body.gst/100),
+    "message1":req.body.message1,
     "quantity1":req.body.quantity1,
     "price1":req.body.price1,
     "gst1":req.body.gst1,
-    
+    "message2":req.body.message2,
     "quantity2":req.body.quantity2,
     "price2":req.body.price2,
     "gst2":req.body.gst2,
-    
+    "message3":req.body.message3,
     "quantity3":req.body.quantity3,
     "price3":req.body.price3,
     "gst3":req.body.gst3,
@@ -700,8 +701,8 @@ app.post('/send', (req, res) => {
 else{
   var messages={
     "fromsender":mailOptions.from,
-    "sendername":temp[4],
-    "emailsender":temp[2],
+    "sendername":results[0].firstname+''+results[0].lastname,
+    "emailsender":results[0].email,
     "status":'sent',
     "Messages":req.body.message,
     "image":req.files[0].filename,
@@ -716,15 +717,15 @@ else{
     "quantity":undefined,
     "price":undefined,
     "gst":undefined,
-    "total":undefined,
+    "message1":undefined,
     "quantity1":undefined,
     "price1":undefined,
     "gst1":undefined,
-    "total1":undefined,
+    "message2":undefined,
     "quantity2":undefined,
     "price2":undefined,
     "gst2":undefined,
-    "total2":undefined,
+    "message3":undefined,
     "quantity3":undefined,
     "price3":undefined,
     "gst3":undefined,
@@ -735,8 +736,8 @@ else{
     else{
   // setup email data with unicode symbols
   var mailOptions = {
-    from: '"'+temp[4]+'"<'+temp[2]+'>', // sender address
-    to: ''+temp[3]+'', // list of receivers
+    from: '"'+results[0].firstname+''+results[0].lastname+'"<'+results[0].email+'>', // sender address
+    to: ''+receivers+'', // list of receivers
     subject: ''+req.body.subject+'', // Subject line
     text: ''+req.body.text+'', // plain text body
     html:output // html body
@@ -745,8 +746,8 @@ var today = new Date();
 if(req.body.purpose=="order"){
 var messages={
   "fromsender":mailOptions.from,
-  "sendername":temp[4],
-  "emailsender":temp[2],
+  "sendername":results[0].firstname+''+results[0].lastname,
+  "emailsender":results[0].email,
   "status":'sent',
   "Messages":req.body.message,
   "image":'undefined',
@@ -761,15 +762,15 @@ var messages={
   "quantity":req.body.quantity,
   "price":req.body.price,
   "gst":req.body.gst,
-  "total":(req.body.price*req.body.quantity)+(req.body.price*req.body.quantity)*(req.body.gst/100),
+  "message1":req.body.message1,
   "quantity1":req.body.quantity1,
   "price1":req.body.price1,
   "gst1":req.body.gst1,
-  
+  "message2":req.body.message2,
   "quantity2":req.body.quantity2,
   "price2":req.body.price2,
   "gst2":req.body.gst2,
-  
+  "message3":req.body.message3,
   "quantity3":req.body.quantity3,
   "price3":req.body.price3,
   "gst3":req.body.gst3
@@ -778,8 +779,8 @@ var messages={
 }}else{
   var messages={
     "fromsender":mailOptions.from,
-    "sendername":temp[4],
-    "emailsender":temp[2],
+    "sendername":results[0].firstname+''+results[0].lastname,
+    "emailsender":results[0].email,
     "status":'sent',
     "Messages":req.body.message,
     "image":'undefined',
@@ -794,15 +795,15 @@ var messages={
     "quantity":undefined,
     "price":undefined,
     "gst":undefined,
-    "total":undefined,
+    "message1":undefined,
     "quantity1":undefined,
     "price1":undefined,
     "gst1":undefined,
-    "total1":undefined,
+    "message2":undefined,
     "quantity2":undefined,
     "price2":undefined,
     "gst2":undefined,
-    "total2":undefined,
+    "message3":undefined,
     "quantity3":undefined,
     "price3":undefined,
     "gst3":undefined,
@@ -864,7 +865,7 @@ var messages={
           }
         });
       
-        connection.query("select * from messages WHERE emailsender = ?",[temp[2]],function(err,result,fields){
+        connection.query("select * from messages WHERE emailsender = ?",[req.body.email],function(err,result,fields){
           if (err) throw err;
           console.log('inside final ');
           
