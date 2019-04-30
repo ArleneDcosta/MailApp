@@ -343,7 +343,7 @@ app.post('/send', (req, res) => {
           var qty = req.body.quantity;
           var price = req.body.price;
           var gst = req.body.gst;
-          var total = (price*qty)+(price*qty)*(gst/100);
+         
           if(req.body.price1!=null ||req.body.price1!=undefined ){
             var t=`<tr><td>${req.body.message1}</td><td>
              ${req.body.price1}
@@ -374,6 +374,7 @@ app.post('/send', (req, res) => {
              <td>
              ${(req.body.price2*req.body.quantity2)+(req.body.price2*req.body.quantity2)*(req.body.gst2/100)}
              </td><tr>`;
+             
            }
            else{
              var u=``;
@@ -391,10 +392,31 @@ app.post('/send', (req, res) => {
              <td>
              ${(req.body.price3*req.body.quantity3)+(req.body.price3*req.body.quantity3)*(req.body.gst3/100)}
              </td><tr>`;
+
+            
            }
            else{
              var v=``;
            }
+           if(req.body.price1!=null && req.body.price2==null ){
+            var total = (req.body.price*req.body.quantity)+(req.body.price*req.body.quantity)*(req.body.gst/100)+
+                        (req.body.price1*req.body.quantity1)+(req.body.price1*req.body.quantity1)*(req.body.gst1/100);
+           }
+           else if(req.body.price2!=null && req.body.price3==null){
+            var total = (req.body.price*req.body.quantity)+(req.body.price*req.body.quantity)*(req.body.gst/100)+
+            (req.body.price1*req.body.quantity1)+(req.body.price1*req.body.quantity1)*(req.body.gst1/100)+
+            (req.body.price2*req.body.quantity2)+(req.body.price2*req.body.quantity2)*(req.body.gst2/100);
+           }
+           else if(req.body.price3!=null){
+            var total = (req.body.price*req.body.quantity)+(req.body.price*req.body.quantity)*(req.body.gst/100)+
+            (req.body.price1*req.body.quantity1)+(req.body.price1*req.body.quantity1)*(req.body.gst1/100)+
+            (req.body.price2*req.body.quantity2)+(req.body.price2*req.body.quantity2)*(req.body.gst2/100)+
+            (req.body.price3*req.body.quantity3)+(req.body.price3*req.body.quantity3)*(req.body.gst3/100);
+           }
+           else{
+            var total = (req.body.price*req.body.quantity)+(req.body.price*req.body.quantity)*(req.body.gst/100);
+           }
+
               var output = `
               <!doctype html>
           <html>
@@ -582,6 +604,7 @@ app.post('/send', (req, res) => {
                
                
                     +`</tr>
+                    <tr><td></td><td></td><td></td><td></td><td>${total}</td></tr>
           </table>
           
           <table>
@@ -659,7 +682,7 @@ app.post('/send', (req, res) => {
   {
     attachment = [{ filename:req.files[0].originalname,path:__dirname + '/public/uploads/'+req.files[0].filename}];
     var mailOptions = {
-      from: '"'+results[0].firstname+''+results[0].lastname+'"<'+results[0].email+'>', // sender address
+      from: '"'+results[0].firstname+' '+results[0].lastname+'"<'+results[0].email+'>', // sender address
       to: ''+receivers+'', // list of receivers
       subject: ''+req.body.subject+'', // Subject line
       text: ''+req.body.text+'', // plain text body
@@ -670,7 +693,7 @@ app.post('/send', (req, res) => {
   if(req.body.purpose=="order"){
   var messages={
     "fromsender":mailOptions.from,
-    "sendername":results[0].firstname+''+results[0].lastname,
+    "sendername":results[0].firstname+' '+results[0].lastname,
     "emailsender":results[0].email,
     "status":'sent',
     "Messages":req.body.message,
@@ -704,7 +727,7 @@ app.post('/send', (req, res) => {
 else{
   var messages={
     "fromsender":mailOptions.from,
-    "sendername":results[0].firstname+''+results[0].lastname,
+    "sendername":results[0].firstname+' '+results[0].lastname,
     "emailsender":results[0].email,
     "status":'sent',
     "Messages":req.body.message,
@@ -739,7 +762,7 @@ else{
     else{
   // setup email data with unicode symbols
   var mailOptions = {
-    from: '"'+results[0].firstname+''+results[0].lastname+'"<'+results[0].email+'>', // sender address
+    from: '"'+results[0].firstname+' '+results[0].lastname+'"<'+results[0].email+'>', // sender address
     to: ''+receivers+'', // list of receivers
     subject: ''+req.body.subject+'', // Subject line
     text: ''+req.body.text+'', // plain text body
@@ -749,7 +772,7 @@ var today = new Date();
 if(req.body.purpose=="order"){
 var messages={
   "fromsender":mailOptions.from,
-  "sendername":results[0].firstname+''+results[0].lastname,
+  "sendername":results[0].firstname+' '+results[0].lastname,
   "emailsender":results[0].email,
   "status":'sent',
   "Messages":req.body.message,
@@ -782,7 +805,7 @@ var messages={
 }}else{
   var messages={
     "fromsender":mailOptions.from,
-    "sendername":results[0].firstname+''+results[0].lastname,
+    "sendername":results[0].firstname+' '+results[0].lastname,
     "emailsender":results[0].email,
     "status":'sent',
     "Messages":req.body.message,
