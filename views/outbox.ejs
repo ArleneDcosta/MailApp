@@ -36,7 +36,11 @@
                     <td>Text:<input name="text" id="text"></td>
                   </tr>
                   <tr>
-                    <td>Purpose: <input type="text" name="purpose"  onchange="myFunction(this.value)"></td>
+                    <td>Purpose: <select id="mySelect" name="purpose" onchange="myFunction()">
+                      <option value="order">order</option>
+                      <option value="other" selected>customer</option>
+                      
+                    </select></td>
                   </tr>
                   <tr>
                   <td>
@@ -318,7 +322,8 @@
    
     
     <script>
-      function myFunction(val) {
+      function myFunction() {
+        var val = document.getElementById("mySelect").value;
   if(val=="order"){
       $('message').val('Enter product name:');
       $('#dynamic').append('<tr><td>Orderno:<input type="text" name="orderno" required></tr><tr><td>Orderdate in (dd/mm/yyyy):<input type="text" name="orderdate" required></td></tr></td></tr><tr><td>Orderprice:<input type="text" name="orderprice" required></td></tr><tr><td>Quantity:<input type="text" name="quantity" required></td></tr><tr><td>Price:<input type="text" name="price" required></td></tr><tr><td>GST:<input type="text" name="gst" required></td></tr><tr><td><button id="add">Add more order</button></td></tr>');
