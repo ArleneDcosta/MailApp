@@ -59,7 +59,7 @@ app.post("/register",function(req,res){
       console.log("successfully Inserted!!!!!");
     }
     
-      connection.query("select * from messages WHERE emailsender = ?",[req.body.email],function(err,result,fields){
+      connection.query("select * from messages WHERE emailsender = ?  and password = ?",[req.body.email,req.body.password],function(err,result,fields){
         if (err) throw err;
         console.log('inside final ');
         
@@ -91,15 +91,15 @@ app.post("/sign",function(req,res){
   let transporter = nodemailer.createTransport({
     service:'Gmail',
     auth: {
-        user: req.body.email, // generated ethereal user
-        pass: req.body.password  // generated ethereal password
+        user: 'info@mypehchan.com', // generated ethereal user
+        pass: 'pehchan11' // generated ethereal password
     },
     tls:{
       rejectUnauthorized:false
     }
   });
   let mailOptions = {
-    from: '"'+req.body.firstname+'"<'+req.body.email +'>', // sender address
+    from: '"Pehchan"< info@mypehchan.com >', // sender address
     to: ''+req.body.email+'', // list of receivers
     subject: 'Verify', // Subject line
     text: 'Enter the otp below to verify your account in the database', // plain text body
@@ -324,7 +324,7 @@ app.post('/send', (req, res) => {
     // stream.on('finish', function(){
     //     fs.unlink(req.files[0].path);
     // });
-  console.log(req.files);
+  
   var email= req.body.email;
   connection.query('SELECT * FROM users WHERE email = ?',[email], function (error, results, fields) {
     console.log(results);
@@ -644,8 +644,8 @@ app.post('/send', (req, res) => {
     // secure: true, // true for 465, false for other ports
     service:'Gmail',
     auth: {
-        user: results[0].email, // generated ethereal user
-        pass: req.body.password  // generated ethereal password
+        user:'info@mypehchan.com', // generated ethereal user
+        pass: 'pehchan11'  // generated ethereal password
     },
     tls:{
       rejectUnauthorized:false
