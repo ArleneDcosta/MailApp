@@ -628,10 +628,13 @@ app.post('/send', (req, res) => {
     <p>You have a new contact request</p>
     <h3>Contact Details</h3>
     <ul>  
-      <li>Name: XYZ</li>
+      <li>Name: ${results[0].firstname}  ${results[0].lastname}</li>
       <li>Company:Pehchan</li>
       <li>Email:pehchan@gmail.com</li>
       <li>Phone:0222892939/li>
+      <li>Pehchan,Gala no.4<br>
+      St. Martin Road, Off Turner Road,<br>
+      Bandra,	Mumbai - 400 050</li>
     </ul>
     <h3>Message</h3>
     <pre>${req.body.message}</pre>`;
