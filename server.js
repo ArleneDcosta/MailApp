@@ -127,7 +127,16 @@ app.get("/signup",function(req,res){
   res.render('signup');
 });
 app.get("/logout",function(req,res){
-  res.render('login');
+  req.session = null;
+  res.redirect('/');
+});
+app.use(function(req, res, next) {
+  if (!req.user) {
+      res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+      res.header('Expires', '-1');
+      res.header('Pragma', 'no-cache');
+  }
+  next();
 });
 app.post("/sent",function(req,res){
   var email = req.body.email;
