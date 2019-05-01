@@ -340,10 +340,6 @@ app.post('/send', (req, res) => {
         console.log(email);
         if(req.body.purpose=="order")
         {
-          var qty = req.body.quantity;
-          var price = req.body.price;
-          var gst = req.body.gst;
-         
           if(req.body.price1!=null ||req.body.price1!=undefined ){
             var t=`<tr><td>${req.body.message1}</td><td>
              ${req.body.price1}
@@ -625,7 +621,7 @@ app.post('/send', (req, res) => {
             }          
         else{
           var output = `
-    <p>You have a new contact request</p>
+      <img src="http://www.mailer.mypehchan.com/logo1.png" style="width:100%; max-width:300px;">
     <h3>Contact Details</h3>
     <ul>  
       <li>Name: ${results[0].firstname}  ${results[0].lastname}</li>
