@@ -629,22 +629,163 @@ app.post('/send', (req, res) => {
               `;
             }          
         else{
-          var output = `
-      <img src="http://www.mailer.mypehchan.com/logo1.png" style="width:100%; max-width:300px;">
-    <h3>Contact Details</h3>
-    <ul>  
-      <li>Name: ${results[0].firstname}  ${results[0].lastname}</li>
-      <li>Company:Pehchan</li>
-      <li>Email:pehchan@gmail.com</li>
-      <li>Phone:0222892939/li>
-      <li>Pehchan,Gala no.4<br>
-      St. Martin Road, Off Turner Road,<br>
-      Bandra,	Mumbai - 400 050</li>
-    </ul>
-    <h3>Message</h3>
-    <pre>${req.body.message}</pre>`;
+          var output = 
+     
+    `<!doctype html>
+    <html>
+    <head>
+       <meta charset="utf-8">
+       <title></title>
     
-        }
+       <style>
+       .invoice-box {
+           max-width: 800px;
+           margin: auto;
+           padding: 30px;
+           border: 1px solid #eee;
+           box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+           font-size: 16px;
+           line-height: 24px;
+           font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+           color: #555;
+       }
+    
+       .invoice-box table {
+           width: 100%;
+           line-height: inherit;
+           text-align: left;
+       }
+    
+       .invoice-box table td {
+           padding: 5px;
+           vertical-align: top;
+       }
+    
+       .invoice-box table tr td:nth-child(2) {
+           text-align: right;
+       }
+    
+       .invoice-box table tr.top table td {
+           padding-bottom: 20px;
+       }
+    
+       .invoice-box table tr.top table td.title {
+           font-size: 45px;
+           line-height: 45px;
+           color: #333;
+       }
+    
+       .invoice-box table tr.information table td {
+           padding-bottom: 40px;
+       }
+    
+       .invoice-box table tr.heading td {
+           background: #eee;
+           border-bottom: 1px solid #ddd;
+           font-weight: bold;
+       }
+    
+       .invoice-box table tr.details td {
+           padding-bottom: 20px;
+       }
+    
+       .invoice-box table tr.item td{
+           border-bottom: 1px solid #eee;
+       }
+    
+       .invoice-box table tr.item.last td {
+           border-bottom: none;
+       }
+    
+       .invoice-box table tr.total td:nth-child(2) {
+           border-top: 2px solid #eee;
+           font-weight: bold;
+       }
+    
+       @media only screen and (max-width: 600px) {
+           .invoice-box table tr.top table td {
+               width: 100%;
+               display: block;
+               text-align: center;
+           }
+    
+           .invoice-box table tr.information table td {
+               width: 100%;
+               display: block;
+               text-align: center;
+           }
+       }
+    
+       /** RTL **/
+       .rtl {
+           direction: rtl;
+           font-family: Tahoma, 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+       }
+    
+       .rtl table {
+           text-align: right;
+       }
+    
+       .rtl table tr td:nth-child(2) {
+           text-align: left;
+       }
+       </style>
+    </head>
+    
+    <body>
+       <div class="invoice-box">
+           <table cellpadding="0" cellspacing="0">
+               <tr class="top">
+                   <td colspan="2">
+                       <table>
+                           <tr>
+                               <td class="title">
+                                   <img src="http://www.mailer.mypehchan.com/logo1.png" style="width:100%; max-width:300px;">
+                               </td>
+                           </tr>
+                       </table>
+                   </td>
+               </tr>
+    
+               <tr class="information">
+                   <td colspan="2">
+                       <table>
+                           <tr>
+                               <td>
+                                   Pehchan,Gala no.4<br>
+                                   St. Martin Road, Off Turner Road,<br>
+                                   Bandra,	Mumbai - 400 050
+                               </td>
+    
+                               <td>
+                  Pehchan<br>
+                   ${results[0].firstname}`+` `+`${results[0].lastname}<br>
+                   ${results[0].email}<br>
+                   ${results[0].phoneno}
+                               </td>
+                           </tr>
+                       </table>
+                   </td>
+               </tr>
+               <tr><td><pre>${req.body.message}</pre></td></tr>
+             </table>
+    <table>
+              
+    <table>
+      <tr>
+        <th width='1%'>follow us :</th>
+        <th width='15%'>                        <img src="http://www.mailer.mypehchan.com/facebook.png" data-default="placeholder" data-max-width="30" width='30' height='30' alt='facebook' style='margin-right:40x;' data-customIcon="true" >
+          <img src="http://www.mailer.mypehchan.com/twitter.png" data-default="placeholder" data-max-width="30" width='30' height='30' alt='twitter' style='margin-right:40x;'>
+          <img src="http://www.mailer.mypehchan.com/pinterest.png" width="30" height="30" data-max-width="30" alt='Pinterest' style='margin-right:40x;' data-customIcon="true" />
+    
+     </th>
+      </tr>
+    </table>
+    
+       </div>
+    </body>
+    </html>
+        `; }
       
   // create reusable transporter object using the default SMTP transport
   let transporter = nodemailer.createTransport({
