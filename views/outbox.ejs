@@ -17,9 +17,11 @@
     <form method="GET" action="/logout">
       <button >LOGOUT</button>
     </form> 
-    <div id="myModal" class="modal">
+    <div id="myModal" class="modal" >
+      <div class="modal-dialog"  style=" max-height:100%; max-width:100%; ">
       <!-- Modal content -->
-      <div class="modal-content">
+      <div class="modal-content" >
+        
         <span class="close">&times;</span>
         <div class="table-responsive">
           <form method="POST" action="/send" enctype="multipart/form-data">
@@ -72,6 +74,7 @@
           </form>
 
         </div>
+      </div>
       </div>
     </div>
    

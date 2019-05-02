@@ -196,7 +196,7 @@ app.post("/senddraft",function(req,res){
     "total3":undefined
   };
   
-  if (req.body.subject!=''){
+  if (req.body.subject!='' && req.body.text!=''){
   connection.query('INSERT INTO messages SET ?',messages, function (error, results, fields) {
     console.log(results);
     if (error) {

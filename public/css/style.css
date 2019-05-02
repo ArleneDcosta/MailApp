@@ -1,5 +1,6 @@
 html,body {
   height:100%;
+  width:100%;
   margin: 0;
   padding: 0;
 }
@@ -126,19 +127,22 @@ button:disabled {
   top: 0;
   width: 100%; /* Full width */
   height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
+  overflow: auto; 
   background-color: rgb(0,0,0); /* Fallback color */
   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
-
+.modal-dialog{
+  overflow-y: initial !important
+}
 /* Modal Content */
 .modal-content {
   background-color: #fefefe;
   margin: auto;
   padding: 10px;
   border: 1px solid #888;
-  width: 70%;
-  height:70%;
+ 
+  width: 100%;
+  height:100%;
 }
 
 /* The Close Button */
@@ -445,6 +449,14 @@ hr { margin-top: 5px;margin-bottom: 10px; }
   }
   
 }
+@media (min-height: 250px) {
+  .nav-side-menu .menu-list .menu-content {
+    display: block;
+  }
+  .modal-dialog{
+    overflow-y: scroll;
+  }
+}
 
 pre{
   background-color: white;
@@ -467,3 +479,4 @@ pre{
   
   word-break: break-word; 
  }
+ 
