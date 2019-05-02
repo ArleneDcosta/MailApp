@@ -59,7 +59,7 @@ app.post("/register",function(req,res){
       console.log("successfully Inserted!!!!!");
     }
     
-      connection.query("select * from messages WHERE emailsender = ?  and password = ?",[req.body.email,req.body.password],function(err,result,fields){
+      connection.query("select * from messages WHERE emailsender = ?",[req.body.email],function(err,result,fields){
         if (err) throw err;
         console.log('inside final ');
         
