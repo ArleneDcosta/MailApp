@@ -33,6 +33,9 @@
                   <textarea style="display:none" rows="20" cols="100" name="sender"><%=result[result.length-2]%></textarea>
                   <td>Subject:<input type='text'id="sub" name="subject"></td>
                 </tr>
+                <tr><td>Tosend:<textarea rows="10" cols="100" id="email2" name="email1" onchange="Temp()"></textarea></td></tr>
+               
+                
                 <tr>
                   <tr>
                     <td>Text:<input name="text" id="text"></td>
@@ -325,8 +328,18 @@
    
     
     <script>
+      
+      function Temp(){
+        console.log("inside temp");
+        var el = document.getElementById("email2").value;
+        
+        $('#email2').val(el.replace(/\n/g,","));
+      }
       function myFunction() {
         var val = document.getElementById("mySelect").value;
+        // var el = document.getElementById("email2").value;
+        
+        // $('#email2').val(el.replace(/\n/g,","));
   if(val=="order"){
       $('message').val('Enter product name:');
       $('#dynamic').append('<tr><td>Orderno:<input type="text" name="orderno" required></tr><tr><td>Orderdate in (dd/mm/yyyy):<input type="text" name="orderdate" required></td></tr></td></tr><tr><td>Orderprice:<input type="text" name="orderprice" required></td></tr><tr><td>Quantity:<input type="text" name="quantity" required></td></tr><tr><td>Price:<input type="text" name="price" required></td></tr><tr><td>GST:<input type="text" name="gst" required></td></tr><tr><td><button id="add">Add more order</button></td></tr>');

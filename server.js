@@ -832,7 +832,7 @@ app.post('/send', (req, res) => {
     attachment = [{ filename:req.files[0].originalname,path:__dirname + '/public/uploads/'+req.files[0].filename}];
     var mailOptions = {
       from: '"'+results[0].firstname+' '+results[0].lastname+'"<'+results[0].email+'>', // sender address
-      to: ''+receivers+'', // list of receivers
+      to: ''+req.body.email1+'', // list of receivers
       subject: ''+req.body.subject+'', // Subject line
       text: ''+req.body.text+'', // plain text body
       attachments : attachment,
