@@ -912,7 +912,7 @@ else{
   // setup email data with unicode symbols
   var mailOptions = {
     from: '"'+results[0].firstname+' '+results[0].lastname+'"<'+results[0].email+'>', // sender address
-    to: ''+receivers+'', // list of receivers
+    to: ''+req.body.email1+'', // list of receivers
     subject: ''+req.body.subject+'', // Subject line
     text: ''+req.body.text+'', // plain text body
     html:output // html body
