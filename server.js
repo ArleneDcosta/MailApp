@@ -801,33 +801,7 @@ app.post('/send', (req, res) => {
       rejectUnauthorized:false
     }
   });
-  var workbook = new Excel.Workbook();
-  var arr = [];
-  workbook.xlsx.readFile("sample.xlsx").then(function(){
-    var workSheet =  workbook.getWorksheet("Sheet1"); 
-    workSheet.eachRow({ includeEmpty: true }, function(row, rowNumber) {
-
-      currRow = workSheet.getRow(rowNumber); 
-      // console.log("Row " + rowNumber + " = " + JSON.stringify(row.values));
-      
-      arr.push(row.values[1]);
-      console.log("inside");
-      
-       // console.log("Email:" + currRow.getCell(1).value[0] + row.values[1]);
-       // console.log("User Name :" + row.values[1] +", Password :" +  row.values[2] ); 
-
-       // assert.equal(currRow.getCell(2).type, Excel.ValueType.Number); 
-     //  console.log("Row " + rowNumber + " = " + JSON.stringify(row.values));
-    });
-    var receivers = arr.join();
-    // var temp = {};
-    // for(i=0;i<whole.length;i++){
-    // 	if(whole[i][2]==results[0].email){
-    // 		temp = whole[i];
-    // 		break;
-    // 	}
-    // }
-    if(req.files.length!=0)
+  if(req.files.length!=0)
   {
     attachment = [{ filename:req.files[0].originalname,path:__dirname + '/public/uploads/'+req.files[0].filename}];
     var mailOptions = {
@@ -1052,7 +1026,7 @@ var messages={
           res.render('outbox',{result:result});
         });
   });
-}); 
+
 }
 
 });
