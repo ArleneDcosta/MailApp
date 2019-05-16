@@ -360,6 +360,8 @@ add1.onclick = function() {
 }
 }
 if(val=="other"){
+  var e = document.getElementById("message").value;
+  $('#message').val("Enter message here");
   var oRows = document.getElementById('dynamic').getElementsByTagName('tr');
 var temp = oRows.length;
  
